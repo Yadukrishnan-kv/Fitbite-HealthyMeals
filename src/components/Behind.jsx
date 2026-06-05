@@ -41,7 +41,7 @@ export default function Behind() {
             </p>
             <div>
               <div className="founder-sig">Fitbite Team</div>
-              <div className="founder-role">Founders & Nutrition Team — Perumpavur, Kerala</div>
+              <div className="founder-role">Founders & Nutrition Team — Kozhikode, Kerala</div>
             </div>
           </motion.div>
         </div>

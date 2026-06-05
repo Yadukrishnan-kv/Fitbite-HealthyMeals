@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { FiInstagram, FiTwitter, FiYoutube } from "react-icons/fi";
+import { FiInstagram, FiYoutube } from "react-icons/fi";
 import "../styles/sections.css";
 
 const footerLinks = {
@@ -16,6 +16,11 @@ const footerLinks = {
     { label: "Terms of Service", href: "#" },
   ],
 };
+
+const socialLinks = [
+  { Icon: FiInstagram, href: "https://www.instagram.com/fit_bite1?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==", label: "Instagram" },
+  { Icon: FiYoutube, href: "#", label: "Youtube" },
+];
 
 export default function Footer() {
   return (
@@ -36,13 +41,15 @@ export default function Footer() {
               Chef-crafted nutrition delivered daily. Fuel your performance, support your wellness, simplify your life.
             </p>
             <div className="footer-social">
-              {[FiInstagram, FiTwitter, FiYoutube].map((Icon, i) => (
+              {socialLinks.map(({ Icon, href, label }) => (
                 <motion.a
-                  key={i}
-                  href="#"
+                  key={label}
+                  href={href}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="social-link"
                   whileHover={{ y: -2 }}
-                  aria-label={`Social link ${i}`}
+                  aria-label={label}
                 >
                   <Icon />
                 </motion.a>
@@ -68,7 +75,7 @@ export default function Footer() {
             <ul>
               <li><a href="tel:+918089839740">+91 80898 39740</a></li>
               <li><a href="mailto:hello@fitbite.in">hello@fitbite.in</a></li>
-              <li><span style={{ color: "var(--text-muted)", fontSize: 14 }}>Perumpavur, Kerala</span></li>
+              <li><span style={{ color: "var(--text-muted)", fontSize: 14 }}>Kozhikode, Kerala</span></li>
             </ul>
           </div>
         </div>

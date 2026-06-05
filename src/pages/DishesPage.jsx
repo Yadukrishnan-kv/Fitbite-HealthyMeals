@@ -152,11 +152,17 @@ function DishCard({ dish, index }) {
           <span className="stars">{stars}</span>
           {dish.rating} ({dish.reviews})
         </div>
-        <div className="dish-footer">
+          <div className="dish-footer">
           <div className="dish-price">₹{dish.price}</div>
-          <button className="dish-order-btn">
+          <a
+            href="https://wa.me/918089839740?text=Hi%20Fitbite!%20I'd%20like%20to%20order%20the%20"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="dish-order-btn"
+            style={{ textDecoration: "none", display: "inline-flex", alignItems: "center", gap: 8 }}
+          >
             Order <HiArrowRight />
-          </button>
+          </a>
         </div>
       </div>
     </motion.div>

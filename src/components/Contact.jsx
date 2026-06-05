@@ -5,7 +5,7 @@ import "../styles/sections.css";
 const contactItems = [
   { icon: <HiPhone />, label: "Phone", val: "+91 80898 39740" },
   { icon: <HiMail />, label: "Email", val: "hello@fitbite.in" },
-  { icon: <HiLocationMarker />, label: "Location", val: "Perumpavur, Kerala, India" },
+  { icon: <HiLocationMarker />, label: "Location", val: "Kozhikode, Kerala, India" },
 ];
 
 export default function Contact() {

@@ -104,7 +104,7 @@ export default function Navbar() {
             </motion.button>
 
             <button
-              className="hamburger"
+              className={`hamburger${mobileOpen ? " hidden" : ""}`}
               onClick={() => setMobileOpen(true)}
               aria-label="Open menu"
             >
