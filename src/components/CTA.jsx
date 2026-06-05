@@ -1,20 +1,28 @@
 import { motion } from "framer-motion";
-import { HiArrowRight } from "react-icons/hi";
+import { HiArrowRight, HiBadgeCheck, HiClock, HiHeart } from "react-icons/hi";
 import "../styles/cta.css";
 
-const particles = Array.from({ length: 10 }, (_, i) => ({
+const particles = Array.from({ length: 14 }, (_, i) => ({
   id: i,
   x: Math.random() * 100,
   y: Math.random() * 100,
-  size: 5 + Math.random() * 6,
-  delay: Math.random() * 5,
-  duration: 5 + Math.random() * 5,
+  size: 4 + Math.random() * 6,
+  delay: Math.random() * 6,
+  duration: 4 + Math.random() * 5,
 }));
+
+const ctaStats = [
+  { num: "1,000+", label: "Happy Customers", icon: <HiBadgeCheck /> },
+  { num: "15+", label: "Power Bowls", icon: <HiHeart /> },
+  { num: "Daily", label: "Fresh Delivery", icon: <HiClock /> },
+];
 
 export default function CTA() {
   return (
     <section className="cta-section" id="cta">
-      <div className="cta-glow" />
+      <div className="cta-glow-1" />
+      <div className="cta-glow-2" />
+      <div className="cta-glow-3" />
 
       <div className="cta-particles">
         {particles.map((p) => (
@@ -28,8 +36,8 @@ export default function CTA() {
               height: p.size,
             }}
             animate={{
-              y: [0, -30 - Math.random() * 20, 0],
-              opacity: [0.1, 0.3, 0.1],
+              y: [0, -(20 + Math.random() * 20), 0],
+              opacity: [0.08, 0.3, 0.08],
             }}
             transition={{
               duration: p.duration,
@@ -78,11 +86,33 @@ export default function CTA() {
           </motion.p>
 
           <motion.div
+            className="cta-stats"
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.25 }}
+          >
+            {ctaStats.map((s, i) => (
+              <motion.div
+                key={s.label}
+                className="cta-stat"
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: 0.3 + i * 0.1 }}
+              >
+                <div className="cta-stat-num">{s.num}</div>
+                <div className="cta-stat-label">{s.label}</div>
+              </motion.div>
+            ))}
+          </motion.div>
+
+          <motion.div
             className="cta-btns"
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.35 }}
+            transition={{ duration: 0.6, delay: 0.45 }}
           >
             <a href="#contact" className="btn-primary cta-btn-glow">
               Get Started Today <HiArrowRight />

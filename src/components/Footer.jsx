@@ -1,25 +1,22 @@
 import { motion } from "framer-motion";
-import { FiInstagram, FiYoutube } from "react-icons/fi";
+import { FiInstagram } from "react-icons/fi";
+import { FaWhatsapp } from "react-icons/fa";
 import "../styles/sections.css";
 
 const footerLinks = {
   Company: [
     { label: "About Us", href: "#about" },
     { label: "Our Menu", href: "#menu" },
-    { label: "Careers", href: "#" },
-    { label: "Press", href: "#" },
   ],
   Support: [
     { label: "FAQ", href: "#faq" },
     { label: "Contact", href: "#contact" },
-    { label: "Privacy Policy", href: "#" },
-    { label: "Terms of Service", href: "#" },
   ],
 };
 
 const socialLinks = [
   { Icon: FiInstagram, href: "https://www.instagram.com/fit_bite1?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==", label: "Instagram" },
-  { Icon: FiYoutube, href: "#", label: "Youtube" },
+  { Icon: FaWhatsapp, href: "https://wa.me/918089839740", label: "WhatsApp" },
 ];
 
 export default function Footer() {
@@ -34,7 +31,7 @@ export default function Footer() {
               viewport={{ once: true }}
             >
               <a href="#" className="nav-logo">
-                <img src="/logo.jpeg" alt="Fitbite" className="nav-logo-img" />
+                <img src="/logo.png" alt="Fitbite" className="nav-logo-img" />
               </a>
             </motion.div>
             <p className="footer-tagline">

@@ -21,7 +21,7 @@ function HomePage() {
       <Hero />
       <TrustBar />
       <About />
-      <FeaturedDishes limit={5} />
+      <FeaturedDishes limit={6} />
       <WhyChoose />
       <Process />
       <Behind />

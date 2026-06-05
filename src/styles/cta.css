@@ -7,7 +7,7 @@
   width: 100%;
 }
 
-.cta-glow {
+.cta-glow-1 {
   position: absolute;
   top: 50%;
   left: 50%;
@@ -16,6 +16,28 @@
   height: 350px;
   border-radius: 50%;
   background: radial-gradient(ellipse, rgba(70, 132, 50, 0.08) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.cta-glow-2 {
+  position: absolute;
+  top: 20%;
+  right: -10%;
+  width: 400px;
+  height: 400px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(70, 132, 50, 0.06) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.cta-glow-3 {
+  position: absolute;
+  bottom: 10%;
+  left: -5%;
+  width: 300px;
+  height: 300px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(70, 132, 50, 0.05) 0%, transparent 70%);
   pointer-events: none;
 }
 
@@ -60,6 +82,34 @@
   line-height: 1.7;
 }
 
+.cta-stats {
+  display: flex;
+  justify-content: center;
+  gap: 48px;
+  margin-bottom: 48px;
+  flex-wrap: wrap;
+}
+
+.cta-stat {
+  text-align: center;
+}
+
+.cta-stat-num {
+  font-family: var(--font-heading);
+  font-size: 36px;
+  font-weight: 700;
+  color: var(--premium-green);
+  line-height: 1;
+  margin-bottom: 6px;
+}
+
+.cta-stat-label {
+  font-size: 13px;
+  color: var(--text-muted);
+  font-weight: 400;
+  letter-spacing: 0.3px;
+}
+
 .cta-btns {
   display: flex;
   gap: 14px;
@@ -77,7 +127,7 @@
   inset: -4px;
   border-radius: var(--radius-full);
   background: conic-gradient(from var(--angle), var(--soft-green), var(--premium-green), var(--soft-green));
-  opacity: 0;
+  opacity: 0.6;
   transition: opacity var(--transition-normal);
   z-index: -1;
   animation: spin-gradient 3s linear infinite;

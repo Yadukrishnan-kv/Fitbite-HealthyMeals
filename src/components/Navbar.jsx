@@ -49,9 +49,9 @@ export default function Navbar() {
       <nav className={`navbar${scrolled ? " scrolled" : ""}`}>
         <div className="container">
           <div className="nav-inner">
-            <Link to="/" className="nav-logo" onClick={() => setMobileOpen(false)}>
+            <Link to="/" className="nav-logo" onClick={() => { setMobileOpen(false); window.scrollTo(0, 0); }}>
               <motion.img
-                src="/logo.jpeg"
+                src="/logo.png"
                 alt="Fitbite"
                 className="nav-logo-img"
                 initial={{ scale: 0 }}

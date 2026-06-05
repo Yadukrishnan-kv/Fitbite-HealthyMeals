@@ -21,7 +21,7 @@ export default function DishesPage() {
       : dishes.filter((d) => d.category.includes(activeFilter));
 
   return (
-    <section className="section dishes-section" style={{ paddingTop: "160px" }}>
+    <section className="section dishes-section" style={{ paddingTop: "105px" }}>
       <div className="container">
         <Link
           to="/"
