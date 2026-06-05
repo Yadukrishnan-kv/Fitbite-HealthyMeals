@@ -10,7 +10,7 @@ export const dishes = [
     carbs: "42g",
     rating: 4.9,
     reviews: 128,
-    image: "https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=600&q=80",
+    image: "https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=800&q=85",
   },
   {
     id: 2,
@@ -23,7 +23,7 @@ export const dishes = [
     carbs: "38g",
     rating: 4.8,
     reviews: 96,
-    image: "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=600&q=80",
+    image: "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=800&q=85",
   },
   {
     id: 3,
@@ -36,7 +36,7 @@ export const dishes = [
     carbs: "36g",
     rating: 4.7,
     reviews: 84,
-    image: "https://images.unsplash.com/photo-1512058564366-18510be2db19?w=600&q=80",
+    image: "https://images.unsplash.com/photo-1512058564366-18510be2db19?w=800&q=85",
   },
   {
     id: 4,
@@ -49,7 +49,7 @@ export const dishes = [
     carbs: "28g",
     rating: 4.9,
     reviews: 112,
-    image: "https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?w=600&q=80",
+    image: "https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?w=800&q=85",
   },
   {
     id: 5,
@@ -62,7 +62,7 @@ export const dishes = [
     carbs: "32g",
     rating: 4.6,
     reviews: 73,
-    image: "https://images.unsplash.com/photo-1547592180-85f173990554?w=600&q=80",
+    image: "https://images.unsplash.com/photo-1547592180-85f173990554?w=800&q=85",
   },
   {
     id: 6,
@@ -75,7 +75,7 @@ export const dishes = [
     carbs: "34g",
     rating: 4.8,
     reviews: 91,
-    image: "https://images.unsplash.com/photo-1565958011703-44f9829ba187?w=600&q=80",
+    image: "https://images.unsplash.com/photo-1565958011703-44f9829ba187?w=800&q=85",
   },
 ];
 

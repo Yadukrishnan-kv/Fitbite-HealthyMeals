@@ -81,7 +81,7 @@ export default function About() {
             transition={{ duration: 0.7, delay: 0.3 }}
           >
             <img
-              src="https://images.unsplash.com/photo-1543362906-acfc16c67564?w=600&q=80"
+              src="https://images.unsplash.com/photo-1543362906-acfc16c67564?w=1200&q=85"
               alt="Fresh healthy food preparation"
               className="about-img"
             />

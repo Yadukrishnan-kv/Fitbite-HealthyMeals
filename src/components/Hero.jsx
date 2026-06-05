@@ -70,6 +70,9 @@ export default function Hero() {
         ))}
       </div>
 
+     
+
+
       <div className="container">
         <div className="hero-inner">
           <motion.div className="hero-content" style={{ y: contentY, opacity }}>
@@ -157,7 +160,7 @@ export default function Hero() {
                 transition={{ type: "spring", stiffness: 100, damping: 30 }}
               >
                 <motion.img
-                  src="https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=600&q=80"
+                  src="https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?w=1200&q=85"
                   alt="Healthy meal bowl"
                   className="hero-main-img"
                   initial={{ opacity: 0, scale: 0.8, y: 40 }}
