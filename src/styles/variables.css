@@ -1,0 +1,61 @@
+:root {
+  /* Brand Colors */
+  --deep-forest: #0D530E;
+  --premium-green: #468432;
+  --nature-green: #346739;
+  --rich-green: #2F6B3F;
+  --soft-green: #7FB77E;
+  --fresh-green: #79AE6F;
+
+  /* Background & Text */
+  --bg: #F8FAF7;
+  --white: #FFFFFF;
+  --dark-text: #0B0B0B;
+  --muted-text: #5F6B61;
+
+  /* Semantic */
+  --text-primary: var(--dark-text);
+  --text-muted: var(--muted-text);
+  --text-on-dark: var(--white);
+  --bg-primary: var(--bg);
+  --bg-dark: #0B0B0B;
+
+  /* Typography */
+  --font-heading: 'Playfair Display', Georgia, serif;
+  --font-body: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+
+  /* Spacing */
+  --section-py: 120px;
+  --container-max: 1200px;
+  --container-px: 24px;
+
+  /* Shadows */
+  --shadow-sm: 0 2px 8px rgba(11, 11, 11, 0.04);
+  --shadow-md: 0 8px 32px rgba(11, 11, 11, 0.06);
+  --shadow-lg: 0 24px 64px rgba(11, 11, 11, 0.08);
+  --shadow-xl: 0 40px 80px rgba(11, 11, 11, 0.1);
+  --shadow-green: 0 8px 32px rgba(70, 132, 50, 0.15);
+
+  /* Glass */
+  --glass-bg: rgba(255, 255, 255, 0.6);
+  --glass-border: rgba(255, 255, 255, 0.8);
+  --glass-shadow: 0 8px 32px rgba(11, 11, 11, 0.06);
+
+  /* Gradients */
+  --gradient-green: linear-gradient(135deg, var(--premium-green), var(--nature-green));
+  --gradient-dark: linear-gradient(135deg, var(--deep-forest), var(--rich-green));
+  --gradient-hero: radial-gradient(ellipse 80% 60% at 60% 40%, rgba(70, 132, 50, 0.08) 0%, transparent 60%);
+  --gradient-cta: linear-gradient(135deg, var(--bg) 0%, rgba(70, 132, 50, 0.06) 50%, var(--bg) 100%);
+
+  /* Border Radius */
+  --radius-sm: 8px;
+  --radius-md: 16px;
+  --radius-lg: 24px;
+  --radius-xl: 32px;
+  --radius-full: 9999px;
+
+  /* Transitions */
+  --transition-fast: 0.2s ease;
+  --transition-normal: 0.35s ease;
+  --transition-slow: 0.5s ease;
+}

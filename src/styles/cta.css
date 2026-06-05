@@ -1,0 +1,148 @@
+.cta-section {
+  padding: 140px 0;
+  background: var(--gradient-cta);
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+}
+
+.cta-glow {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 700px;
+  height: 350px;
+  border-radius: 50%;
+  background: radial-gradient(ellipse, rgba(70, 132, 50, 0.08) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.cta-particles {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.cta-particle {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--soft-green);
+  opacity: 0.15;
+}
+
+.cta-content {
+  position: relative;
+  z-index: 1;
+}
+
+.cta-title {
+  font-size: clamp(40px, 5vw, 64px);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  margin-bottom: 20px;
+  line-height: 1.05;
+}
+
+.cta-title em {
+  font-style: normal;
+  color: var(--premium-green);
+}
+
+.cta-sub {
+  font-size: 18px;
+  color: var(--text-muted);
+  margin-bottom: 44px;
+  line-height: 1.7;
+}
+
+.cta-btns {
+  display: flex;
+  gap: 14px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.cta-btn-glow {
+  position: relative;
+}
+
+.cta-btn-glow::before {
+  content: '';
+  position: absolute;
+  inset: -4px;
+  border-radius: var(--radius-full);
+  background: conic-gradient(from var(--angle), var(--soft-green), var(--premium-green), var(--soft-green));
+  opacity: 0;
+  transition: opacity var(--transition-normal);
+  z-index: -1;
+  animation: spin-gradient 3s linear infinite;
+}
+
+.cta-btn-glow:hover::before {
+  opacity: 1;
+}
+
+@keyframes spin-gradient {
+  to {
+    --angle: 360deg;
+  }
+}
+
+@property --angle {
+  syntax: '<angle>';
+  initial-value: 0deg;
+  inherits: false;
+}
+
+@media (max-width: 768px) {
+  .cta-section {
+    padding: 80px 0;
+  }
+
+  .cta-title {
+    font-size: clamp(30px, 7vw, 40px);
+  }
+
+  .cta-sub {
+    font-size: 16px;
+    margin-bottom: 32px;
+  }
+
+  .cta-btns {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .cta-btns .btn-primary,
+  .cta-btns .btn-outline {
+    width: 100%;
+    justify-content: center;
+    max-width: 320px;
+  }
+}
+
+@media (max-width: 360px) {
+  .cta-section {
+    padding: 60px 0;
+  }
+
+  .cta-title {
+    font-size: 26px;
+  }
+
+  .cta-sub {
+    font-size: 14px;
+  }
+
+  .cta-btns .btn-primary,
+  .cta-btns .btn-outline {
+    padding: 14px 24px;
+    font-size: 14px;
+    max-width: 280px;
+  }
+}

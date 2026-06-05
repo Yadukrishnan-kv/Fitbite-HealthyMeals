@@ -1,0 +1,140 @@
+.testimonials-section {
+  background: var(--bg);
+  overflow: hidden;
+  position: relative;
+}
+
+.testimonials-header {
+  text-align: center;
+  margin-bottom: 60px;
+}
+
+.testimonials-track-wrap {
+  position: relative;
+  overflow: hidden;
+  padding: 20px 0;
+}
+
+.testimonials-fade-left,
+.testimonials-fade-right {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 100px;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.testimonials-fade-left {
+  left: 0;
+  background: linear-gradient(90deg, var(--bg) 0%, transparent 100%);
+}
+
+.testimonials-fade-right {
+  right: 0;
+  background: linear-gradient(270deg, var(--bg) 0%, transparent 100%);
+}
+
+.testimonials-track {
+  display: flex;
+  gap: 24px;
+  width: max-content;
+}
+
+.testi-card {
+  width: 360px;
+  flex-shrink: 0;
+  background: var(--glass-bg);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-lg);
+  padding: 36px 32px;
+  box-shadow: var(--glass-shadow);
+  transform-style: preserve-3d;
+  transition: all var(--transition-normal);
+}
+
+.testi-card:hover {
+  transform: translateY(-4px) rotateX(2deg);
+  box-shadow: var(--shadow-md);
+}
+
+.testi-stars {
+  color: #e6a800;
+  font-size: 17px;
+  margin-bottom: 18px;
+  letter-spacing: 3px;
+}
+
+.testi-text {
+  font-size: 15px;
+  color: var(--text-primary);
+  line-height: 1.7;
+  margin-bottom: 24px;
+  font-style: italic;
+  font-weight: 400;
+}
+
+.testi-author {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.testi-avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  overflow: hidden;
+  background: var(--gradient-green);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-heading);
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--white);
+  flex-shrink: 0;
+}
+
+.testi-name {
+  font-family: var(--font-heading);
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--dark-text);
+  margin-bottom: 2px;
+}
+
+.testi-tag {
+  font-size: 12px;
+  color: var(--premium-green);
+  font-weight: 500;
+}
+
+@media (max-width: 768px) {
+  .testi-card {
+    width: 300px;
+    padding: 28px 24px;
+  }
+
+  .testimonials-fade-left,
+  .testimonials-fade-right {
+    width: 40px;
+  }
+
+  .testimonials-track {
+    gap: 16px;
+  }
+}
+
+@media (max-width: 360px) {
+  .testi-card {
+    width: 260px;
+    padding: 24px 20px;
+  }
+
+  .testi-text {
+    font-size: 14px;
+  }
+}
