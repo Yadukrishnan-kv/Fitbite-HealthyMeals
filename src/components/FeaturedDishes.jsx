@@ -131,7 +131,7 @@ function DishCard({ dish, index }) {
       <div className="dish-img-wrap">
         <img src={dish.image} alt={dish.name} className="dish-img" loading="lazy" />
         <span className="dish-cat-badge">
-          {dish.category.includes("high-protein") ? "High Protein" : dish.category === "veg" ? "Veg" : "Weight Loss"}
+          {dish.category.includes("veg") ? "Veg" : dish.category.includes("high-protein") ? "High Protein" : "Weight Loss"}
         </span>
       </div>
       <div className="dish-body">
@@ -149,7 +149,7 @@ function DishCard({ dish, index }) {
           <div className="dish-footer">
           <div className="dish-price">₹{dish.price}</div>
           <a
-            href="https://wa.me/918089839740?text=Hi%20Fitbite!%20I'd%20like%20to%20order%20the%20"
+            href={`https://wa.me/919645672899?text=Hi%20Fitbite!%20I'd%20like%20to%20order%20the%20${encodeURIComponent(dish.name)}`}
             target="_blank"
             rel="noopener noreferrer"
             className="dish-order-btn"

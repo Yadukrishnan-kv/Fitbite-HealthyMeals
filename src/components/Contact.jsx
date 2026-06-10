@@ -139,7 +139,7 @@ export default function Contact() {
               Tap the button below to start a conversation. We typically respond within minutes.
             </p>
             <motion.a
-              href="https://wa.me/918089839740"
+              href="https://wa.me/919645672899"
               target="_blank"
               rel="noopener noreferrer"
               style={{
