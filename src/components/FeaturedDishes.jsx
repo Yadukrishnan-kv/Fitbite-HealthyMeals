@@ -149,7 +149,7 @@ function DishCard({ dish, index }) {
           <div className="dish-footer">
           <div className="dish-price">₹{dish.price}</div>
           <a
-            href={`https://wa.me/919645672899?text=Hi%20Fitbite!%20I'd%20like%20to%20order%20the%20${encodeURIComponent(dish.name)}`}
+            href={`https://wa.me/918089839740?text=Hi%20Fitbite!%20I'd%20like%20to%20order%20the%20${encodeURIComponent(dish.name)}`}
             target="_blank"
             rel="noopener noreferrer"
             className="dish-order-btn"

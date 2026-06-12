@@ -16,7 +16,7 @@ const footerLinks = {
 
 const socialLinks = [
   { Icon: FiInstagram, href: "https://www.instagram.com/fit_bite1?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==", label: "Instagram" },
-  { Icon: FaWhatsapp, href: "https://wa.me/919645672899", label: "WhatsApp" },
+  { Icon: FaWhatsapp, href: "https://wa.me/918089839740", label: "WhatsApp" },
 ];
 
 export default function Footer() {
@@ -70,7 +70,7 @@ export default function Footer() {
           <div className="footer-col">
             <h4>Contact</h4>
             <ul>
-              <li><a href="tel:+919645672899">+91 96456 72899</a></li>
+              <li><a href="tel:+918089839740">+91 80898 39740</a></li>
               <li><a href="mailto:hello@fitbite.in">hello@fitbite.in</a></li>
               <li><span style={{ color: "var(--text-muted)", fontSize: 14 }}>Kozhikode, Kerala</span></li>
             </ul>

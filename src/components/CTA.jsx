@@ -117,7 +117,7 @@ export default function CTA() {
             <a href="#contact" className="btn-primary cta-btn-glow">
               Get Started Today <HiArrowRight />
             </a>
-            <a href="tel:9645672899" className="btn-outline">
+            <a href="tel:8089839740" className="btn-outline">
               Call Us Now
             </a>
           </motion.div>
