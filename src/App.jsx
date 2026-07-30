@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { Routes, Route, useLocation } from "react-router-dom";
+import { Routes, Route, Outlet, useLocation } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import Hero from "./components/Hero";
 import TrustBar from "./components/TrustBar";
@@ -14,8 +14,16 @@ import CTA from "./components/CTA";
 import Contact from "./components/Contact";
 import Footer from "./components/Footer";
 import DishesPage from "./pages/DishesPage";
+import { useSetting, useDocumentMeta } from "./context/SiteContext";
+import AdminApp from "./admin/AdminApp";
 
 function HomePage() {
+  useDocumentMeta({
+    title: useSetting("siteTitle", "Fitbite — Chef Crafted Nutrition. Delivered Daily."),
+    description: useSetting("metaDescription", ""),
+    keywords: useSetting("metaKeywords", ""),
+  });
+
   return (
     <>
       <Hero />
@@ -41,17 +49,30 @@ function ScrollToTop() {
   return null;
 }
 
-function App() {
+// Public site chrome (navbar + footer) wraps only the public routes.
+function PublicLayout() {
   return (
     <>
       <ScrollToTop />
       <Navbar />
-      <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/dishes" element={<DishesPage />} />
-      </Routes>
+      <Outlet />
       <Footer />
     </>
+  );
+}
+
+function App() {
+  return (
+    <Routes>
+      {/* Admin panel — self-contained, no public chrome. */}
+      <Route path="/admin/*" element={<AdminApp />} />
+
+      {/* Public site */}
+      <Route element={<PublicLayout />}>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/dishes" element={<DishesPage />} />
+      </Route>
+    </Routes>
   );
 }
 

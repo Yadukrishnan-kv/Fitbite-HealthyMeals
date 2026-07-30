@@ -1,16 +1,25 @@
 import { motion } from "framer-motion";
+import { useSection } from "../context/SiteContext";
 import "../styles/sections.css";
 
-const reasons = [
-  { icon: "🧑‍🍳", title: "Fresh Daily Preparation", desc: "Every bowl is made fresh each morning. No pre-made, no frozen — just pure, same-day freshness in every bite." },
-  { icon: "🥗", title: "Expert Nutrition Planning", desc: "Macro-balanced meals crafted with certified nutrition expertise. Every dish hits your protein, carb, and fat targets." },
-  { icon: "🚀", title: "Doorstep Delivery", desc: "We deliver directly to you — fresh, packaged perfectly, arriving on time every single time." },
-  { icon: "📋", title: "Custom Meal Plans", desc: "Weight loss, muscle gain, maintenance — we build a plan around your specific goals and dietary needs." },
-  { icon: "💰", title: "Affordable Packages", desc: "Premium quality that doesn't break the bank. Starting from just ₹149 per meal — cheaper than eating out unhealthy." },
-  { icon: "✅", title: "Quality Ingredients", desc: "We source only the finest, cleanest ingredients — no preservatives, no hidden nasties, just honest whole food." },
-];
+const FALLBACK = {
+  tag: "Why Fitbite",
+  titleLine1: "Everything You Need,",
+  titleEm: "Nothing You Don't",
+  reasons: [
+    { icon: "🧑‍🍳", title: "Fresh Daily Preparation", desc: "Every bowl is made fresh each morning. No pre-made, no frozen — just pure, same-day freshness in every bite." },
+    { icon: "🥗", title: "Expert Nutrition Planning", desc: "Macro-balanced meals crafted with certified nutrition expertise. Every dish hits your protein, carb, and fat targets." },
+    { icon: "🚀", title: "Doorstep Delivery", desc: "We deliver directly to you — fresh, packaged perfectly, arriving on time every single time." },
+    { icon: "📋", title: "Custom Meal Plans", desc: "Weight loss, muscle gain, maintenance — we build a plan around your specific goals and dietary needs." },
+    { icon: "💰", title: "Affordable Packages", desc: "Premium quality that doesn't break the bank. Starting from just ₹149 per meal — cheaper than eating out unhealthy." },
+    { icon: "✅", title: "Quality Ingredients", desc: "We source only the finest, cleanest ingredients — no preservatives, no hidden nasties, just honest whole food." },
+  ],
+};
 
 export default function WhyChoose() {
+  const s = useSection("whyChoose", FALLBACK);
+  const reasons = s.reasons?.length ? s.reasons : FALLBACK.reasons;
+
   return (
     <section className="section why-section" id="why">
       <div className="container">
@@ -22,7 +31,7 @@ export default function WhyChoose() {
             viewport={{ once: true }}
             transition={{ duration: 0.5 }}
           >
-            Why Fitbite
+            {s.tag}
           </motion.span>
           <motion.h2
             className="section-title"
@@ -31,14 +40,14 @@ export default function WhyChoose() {
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.1 }}
           >
-            Everything You Need,<br /><em>Nothing You Don't</em>
+            {s.titleLine1}<br /><em>{s.titleEm}</em>
           </motion.h2>
         </div>
 
         <div className="why-grid">
           {reasons.map((r, i) => (
             <motion.div
-              key={r.title}
+              key={r.title || i}
               className="why-card"
               initial={{ opacity: 0, y: 40 }}
               whileInView={{ opacity: 1, y: 0 }}

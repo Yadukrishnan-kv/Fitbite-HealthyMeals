@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
-import { HiArrowRight, HiBadgeCheck, HiClock, HiHeart } from "react-icons/hi";
+import { HiArrowRight } from "react-icons/hi";
+import { useSection } from "../context/SiteContext";
 import "../styles/cta.css";
 
 const particles = Array.from({ length: 14 }, (_, i) => ({
@@ -11,13 +12,42 @@ const particles = Array.from({ length: 14 }, (_, i) => ({
   duration: 4 + Math.random() * 5,
 }));
 
-const ctaStats = [
-  { num: "1,000+", label: "Happy Customers", icon: <HiBadgeCheck /> },
-  { num: "15+", label: "Power Bowls", icon: <HiHeart /> },
-  { num: "Daily", label: "Fresh Delivery", icon: <HiClock /> },
-];
+const FALLBACK = {
+  tag: "Get Started Today",
+  title: "Ready To Transform Your Eating Habits?",
+  titleEm: "Transform",
+  subtitle:
+    "Join 1,000+ people already eating smarter with Fitbite. Your first step toward a healthier you starts now.",
+  stats: [
+    { num: "1,000+", label: "Happy Customers" },
+    { num: "15+", label: "Power Bowls" },
+    { num: "Daily", label: "Fresh Delivery" },
+  ],
+  primaryBtn: { label: "Get Started Today", href: "#contact" },
+  secondaryBtn: { label: "Call Us Now", href: "tel:8089839740" },
+};
+
+// Reproduce the original heading: "Ready To <em>Transform</em><br/>Your…".
+function CtaHeading({ title, em }) {
+  if (!em) return <>{title}</>;
+  const idx = title.indexOf(em);
+  if (idx === -1) return <>{title}</>;
+  return (
+    <>
+      {title.slice(0, idx)}
+      <em>{em}</em>
+      <br />
+      {title.slice(idx + em.length).replace(/^\s+/, "")}
+    </>
+  );
+}
 
 export default function CTA() {
+  const s = useSection("cta", FALLBACK);
+  const stats = s.stats?.length ? s.stats : FALLBACK.stats;
+  const primaryBtn = s.primaryBtn || FALLBACK.primaryBtn;
+  const secondaryBtn = s.secondaryBtn || FALLBACK.secondaryBtn;
+
   return (
     <section className="cta-section" id="cta">
       <div className="cta-glow-1" />
@@ -58,7 +88,7 @@ export default function CTA() {
             viewport={{ once: true }}
             transition={{ duration: 0.5 }}
           >
-            Get Started Today
+            {s.tag}
           </motion.span>
 
           <motion.h2
@@ -68,9 +98,7 @@ export default function CTA() {
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.1 }}
           >
-            Ready To <em>Transform</em>
-            <br />
-            Your Eating Habits?
+            <CtaHeading title={s.title} em={s.titleEm} />
           </motion.h2>
 
           <motion.p
@@ -80,9 +108,7 @@ export default function CTA() {
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.2 }}
           >
-            Join 1,000+ people already eating smarter with Fitbite.
-            <br />
-            Your first step toward a healthier you starts now.
+            {s.subtitle}
           </motion.p>
 
           <motion.div
@@ -92,17 +118,17 @@ export default function CTA() {
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.25 }}
           >
-            {ctaStats.map((s, i) => (
+            {stats.map((stat, i) => (
               <motion.div
-                key={s.label}
+                key={stat.label || i}
                 className="cta-stat"
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: 0.3 + i * 0.1 }}
               >
-                <div className="cta-stat-num">{s.num}</div>
-                <div className="cta-stat-label">{s.label}</div>
+                <div className="cta-stat-num">{stat.num}</div>
+                <div className="cta-stat-label">{stat.label}</div>
               </motion.div>
             ))}
           </motion.div>
@@ -114,11 +140,11 @@ export default function CTA() {
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.45 }}
           >
-            <a href="#contact" className="btn-primary cta-btn-glow">
-              Get Started Today <HiArrowRight />
+            <a href={primaryBtn.href} className="btn-primary cta-btn-glow">
+              {primaryBtn.label} <HiArrowRight />
             </a>
-            <a href="tel:8089839740" className="btn-outline">
-              Call Us Now
+            <a href={secondaryBtn.href} className="btn-outline">
+              {secondaryBtn.label}
             </a>
           </motion.div>
         </div>

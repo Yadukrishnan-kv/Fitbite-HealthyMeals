@@ -2,15 +2,18 @@ import { useState, useEffect } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { HiX } from "react-icons/hi";
+import { useSite, useSetting } from "../context/SiteContext";
 import "../styles/navbar.css";
 
-const links = [
-  { to: "/dishes", label: "Menu" },
-  { href: "#why", label: "Why Us" },
-  { href: "#process", label: "Process" },
-  { href: "#testimonials", label: "Reviews" },
-  { href: "#faq", label: "FAQ" },
-  { href: "#contact", label: "Contact" },
+// Fallback header menu (mirrors the seed) so the bar renders instantly and
+// still works if the API is unavailable. The DB is the source of truth.
+const FALLBACK_LINKS = [
+  { label: "Menu", url: "/dishes", linkType: "internal", target: "_self" },
+  { label: "Why Us", url: "#why", linkType: "anchor", target: "_self" },
+  { label: "Process", url: "#process", linkType: "anchor", target: "_self" },
+  { label: "Reviews", url: "#testimonials", linkType: "anchor", target: "_self" },
+  { label: "FAQ", url: "#faq", linkType: "anchor", target: "_self" },
+  { label: "Contact", url: "#contact", linkType: "anchor", target: "_self" },
 ];
 
 function scrollToSection(id) {
@@ -26,16 +29,20 @@ export default function Navbar() {
   const location = useLocation();
   const navigate = useNavigate();
 
+  const { menus } = useSite();
+  const logo = useSetting("logo", "/logo.png");
+  const links = menus.header && menus.header.length ? menus.header : FALLBACK_LINKS;
+
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 60);
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  const handleNavClick = (e, href) => {
+  const handleAnchorClick = (e, url) => {
     e.preventDefault();
     setMobileOpen(false);
-    const id = href.replace("#", "");
+    const id = url.replace("#", "");
     if (location.pathname !== "/") {
       navigate("/");
       setTimeout(() => scrollToSection(id), 100);
@@ -44,6 +51,40 @@ export default function Navbar() {
     }
   };
 
+  // Render one menu entry honoring its linkType/target. Internal links use the
+  // router; anchors smooth-scroll; external links open per their target.
+  const renderLink = (link, className, extra = {}) => {
+    if (link.linkType === "internal") {
+      return (
+        <Link to={link.url} className={className} onClick={() => setMobileOpen(false)} {...extra}>
+          {link.label}
+        </Link>
+      );
+    }
+    if (link.linkType === "external") {
+      return (
+        <a
+          href={link.url}
+          className={className}
+          target={link.target || "_self"}
+          rel={link.target === "_blank" ? "noopener noreferrer" : undefined}
+          onClick={() => setMobileOpen(false)}
+          {...extra}
+        >
+          {link.label}
+        </a>
+      );
+    }
+    // anchor (same-page scroll)
+    return (
+      <a href={link.url} className={className} onClick={(e) => handleAnchorClick(e, link.url)} {...extra}>
+        {link.label}
+      </a>
+    );
+  };
+
+  const keyFor = (link, i) => link._id || link.id || `${link.label}-${i}`;
+
   return (
     <>
       <nav className={`navbar${scrolled ? " scrolled" : ""}`}>
@@ -51,7 +92,7 @@ export default function Navbar() {
           <div className="nav-inner">
             <Link to="/" className="nav-logo" onClick={() => { setMobileOpen(false); window.scrollTo(0, 0); }}>
               <motion.img
-                src="/logo.png"
+                src={logo}
                 alt="Fitbite"
                 className="nav-logo-img"
                 initial={{ scale: 0 }}
@@ -61,29 +102,16 @@ export default function Navbar() {
             </Link>
 
             <ul className="nav-links">
-              {links.map((link, i) =>
-                link.to ? (
-                  <motion.li
-                    key={link.to}
-                    initial={{ opacity: 0, y: -10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.1 + i * 0.05 }}
-                  >
-                    <Link to={link.to}>{link.label}</Link>
-                  </motion.li>
-                ) : (
-                  <motion.li
-                    key={link.href}
-                    initial={{ opacity: 0, y: -10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.1 + i * 0.05 }}
-                  >
-                    <a href={link.href} onClick={(e) => handleNavClick(e, link.href)}>
-                      {link.label}
-                    </a>
-                  </motion.li>
-                )
-              )}
+              {links.map((link, i) => (
+                <motion.li
+                  key={keyFor(link, i)}
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.1 + i * 0.05 }}
+                >
+                  {renderLink(link)}
+                </motion.li>
+              ))}
             </ul>
 
             <motion.button
@@ -133,27 +161,24 @@ export default function Navbar() {
               <HiX />
             </button>
             {links.map((link, i) =>
-              link.to ? (
+              link.linkType === "internal" ? (
                 <Link
-                  key={link.to}
-                  to={link.to}
+                  key={keyFor(link, i)}
+                  to={link.url}
                   onClick={() => setMobileOpen(false)}
                   className="mobile-link"
                 >
                   {link.label}
                 </Link>
               ) : (
-                <motion.a
-                  key={link.href}
-                  href={link.href}
-                  onClick={(e) => handleNavClick(e, link.href)}
-                  className="mobile-link"
+                <motion.div
+                  key={keyFor(link, i)}
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: i * 0.08 }}
                 >
-                  {link.label}
-                </motion.a>
+                  {renderLink(link, "mobile-link")}
+                </motion.div>
               )
             )}
           </motion.div>

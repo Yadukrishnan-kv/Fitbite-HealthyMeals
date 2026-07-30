@@ -1,10 +1,11 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { faqs } from "../data/faqs";
+import { useResource } from "../hooks/useResource";
 import "../styles/sections.css";
 
 export default function FAQ() {
   const [openIndex, setOpenIndex] = useState(null);
+  const { items: faqs, loading } = useResource("/faqs");
 
   const toggle = (i) => setOpenIndex(openIndex === i ? null : i);
 
@@ -35,7 +36,7 @@ export default function FAQ() {
         <div className="faq-list">
           {faqs.map((faq, i) => (
             <motion.div
-              key={i}
+              key={faq._id || faq.id || i}
               className="faq-item"
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -46,7 +47,7 @@ export default function FAQ() {
                 className={`faq-q${openIndex === i ? " open" : ""}`}
                 onClick={() => toggle(i)}
               >
-                {faq.q}
+                {faq.question}
                 <span className="faq-arrow">+</span>
               </button>
               <AnimatePresence>
@@ -58,13 +59,19 @@ export default function FAQ() {
                     exit={{ maxHeight: 0, opacity: 0 }}
                     transition={{ duration: 0.3 }}
                   >
-                    {faq.a}
+                    {faq.answer}
                   </motion.div>
                 )}
               </AnimatePresence>
             </motion.div>
           ))}
         </div>
+
+        {!loading && faqs.length === 0 && (
+          <p style={{ textAlign: "center", color: "var(--text-muted)", padding: "20px 0" }}>
+            No FAQs available right now.
+          </p>
+        )}
       </div>
     </section>
   );

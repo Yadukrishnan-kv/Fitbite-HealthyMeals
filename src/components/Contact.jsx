@@ -1,15 +1,38 @@
 import { motion } from "framer-motion";
 import { HiPhone, HiMail, HiLocationMarker } from "react-icons/hi";
 import { FaWhatsapp } from "react-icons/fa";
+import { useSetting, useSection } from "../context/SiteContext";
+import EmTitle from "./EmTitle";
 import "../styles/sections.css";
 
-const contactItems = [
-  { icon: <HiPhone />, label: "Phone", val: "+91 80898 39740" },
-  { icon: <HiMail />, label: "Email", val: "hello@fitbite.in" },
-  { icon: <HiLocationMarker />, label: "Location", val: "Kozhikode, Kerala, India" },
-];
+const FALLBACK = {
+  tag: "Contact Us",
+  title: "Let's Get You Started",
+  titleEm: "Started",
+  subtitle: "Have questions or ready to order? Reach out and our team will get back to you within minutes.",
+  whatsappHeading: "Chat With Us on WhatsApp",
+  whatsappText: "Tap the button below to start a conversation. We typically respond within minutes.",
+  whatsappBtnLabel: "Message Us on WhatsApp",
+};
 
 export default function Contact() {
+  const c = useSection("contact", FALLBACK);
+
+  const phoneDisplay = useSetting("phoneDisplay", "+91 80898 39740");
+  const phoneRaw = useSetting("phoneRaw", "918089839740");
+  const email = useSetting("email", "hello@fitbite.in");
+  const locationFull = useSetting("locationFull", "Kozhikode, Kerala, India");
+
+  const contactItems = [
+    { icon: <HiPhone />, label: "Phone", val: phoneDisplay },
+    { icon: <HiMail />, label: "Email", val: email },
+    { icon: <HiLocationMarker />, label: "Location", val: locationFull },
+  ];
+
+  // Split the WhatsApp heading so the "WhatsApp" word keeps its brand color.
+  const waHeading = c.whatsappHeading || FALLBACK.whatsappHeading;
+  const waIdx = waHeading.toLowerCase().lastIndexOf("whatsapp");
+
   return (
     <section className="section contact-section" id="contact">
       <div className="container">
@@ -22,7 +45,7 @@ export default function Contact() {
               viewport={{ once: true }}
               transition={{ duration: 0.5 }}
             >
-              Contact Us
+              {c.tag}
             </motion.span>
             <motion.h2
               className="section-title"
@@ -31,7 +54,7 @@ export default function Contact() {
               viewport={{ once: true }}
               transition={{ duration: 0.6, delay: 0.1 }}
             >
-              Let&apos;s Get You <em>Started</em>
+              <EmTitle title={c.title} em={c.titleEm} />
             </motion.h2>
             <motion.p
               className="section-sub"
@@ -40,7 +63,7 @@ export default function Contact() {
               viewport={{ once: true }}
               transition={{ duration: 0.6, delay: 0.2 }}
             >
-              Have questions or ready to order? Reach out and our team will get back to you within minutes.
+              {c.subtitle}
             </motion.p>
 
             <div className="contact-info">
@@ -133,13 +156,21 @@ export default function Contact() {
               <FaWhatsapp />
             </motion.div>
             <h3 style={{ fontFamily: "var(--font-heading)", fontSize: 24, fontWeight: 700, marginBottom: 12, position: "relative", zIndex: 1, color: "var(--dark-text)" }}>
-              Chat With Us on <span style={{ color: "#25D366" }}>WhatsApp</span>
+              {waIdx === -1 ? (
+                waHeading
+              ) : (
+                <>
+                  {waHeading.slice(0, waIdx)}
+                  <span style={{ color: "#25D366" }}>{waHeading.slice(waIdx, waIdx + 8)}</span>
+                  {waHeading.slice(waIdx + 8)}
+                </>
+              )}
             </h3>
             <p style={{ color: "var(--text-muted)", fontSize: 15, marginBottom: 32, maxWidth: 320, lineHeight: 1.7, position: "relative", zIndex: 1 }}>
-              Tap the button below to start a conversation. We typically respond within minutes.
+              {c.whatsappText}
             </p>
             <motion.a
-              href="https://wa.me/918089839740"
+              href={`https://wa.me/${phoneRaw}`}
               target="_blank"
               rel="noopener noreferrer"
               style={{
@@ -161,7 +192,7 @@ export default function Contact() {
               whileHover={{ scale: 1.04, boxShadow: "0 12px 40px rgba(37, 211, 102, 0.4)" }}
               whileTap={{ scale: 0.97 }}
             >
-              <FaWhatsapp size={20} /> Message Us on WhatsApp
+              <FaWhatsapp size={20} /> {c.whatsappBtnLabel}
             </motion.a>
           </motion.div>
         </div>

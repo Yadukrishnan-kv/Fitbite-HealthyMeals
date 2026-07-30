@@ -1,6 +1,7 @@
 import { useRef, useState, useEffect } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { HiArrowRight } from "react-icons/hi";
+import { useSection } from "../context/SiteContext";
 import "../styles/hero.css";
 
 const particles = Array.from({ length: 18 }, (_, i) => ({
@@ -12,9 +13,35 @@ const particles = Array.from({ length: 18 }, (_, i) => ({
   duration: 4 + Math.random() * 4,
 }));
 
+const FALLBACK = {
+  badge: "100% Fresh Ingredients",
+  headingLine1: "Chef Crafted Nutrition.",
+  headingEm: "Delivered Daily.",
+  subtitle:
+    "Healthy meals designed to fuel performance, support wellness, and simplify your lifestyle.",
+  primaryBtn: { label: "View Menu", href: "#menu" },
+  secondaryBtn: { label: "Get Started", href: "#contact" },
+  stats: [
+    { num: "5K+", label: "Meals Delivered" },
+    { num: "1K+", label: "Happy Clients" },
+    { num: "100%", label: "Fresh Ingredients" },
+  ],
+  image: "https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?w=1200&q=85",
+  floatCards: [
+    { label: "Today's Special", val: "₹490", sub: "Harmony Bowl" },
+    { label: "Avg. Protein", val: "35g", sub: "Per meal" },
+  ],
+};
+
 export default function Hero() {
   const ref = useRef(null);
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
+
+  const h = useSection("hero", FALLBACK);
+  const stats = h.stats?.length ? h.stats : FALLBACK.stats;
+  const floatCards = h.floatCards?.length ? h.floatCards : FALLBACK.floatCards;
+  const primaryBtn = h.primaryBtn || FALLBACK.primaryBtn;
+  const secondaryBtn = h.secondaryBtn || FALLBACK.secondaryBtn;
 
   const { scrollYProgress } = useScroll({
     target: ref,
@@ -70,7 +97,7 @@ export default function Hero() {
         ))}
       </div>
 
-     
+
 
 
       <div className="container">
@@ -83,7 +110,7 @@ export default function Hero() {
               transition={{ duration: 0.6 }}
             >
               <span className="hero-badge-dot" />
-              100% Fresh Ingredients
+              {h.badge}
             </motion.div>
 
             <motion.h1
@@ -91,9 +118,9 @@ export default function Hero() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, delay: 0.15 }}
             >
-              Chef Crafted Nutrition.
+              {h.headingLine1}
               <br />
-              <em>Delivered Daily.</em>
+              <em>{h.headingEm}</em>
             </motion.h1>
 
             <motion.p
@@ -102,7 +129,7 @@ export default function Hero() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, delay: 0.3 }}
             >
-              Healthy meals designed to fuel performance, support wellness, and simplify your lifestyle.
+              {h.subtitle}
             </motion.p>
 
             <motion.div
@@ -111,11 +138,11 @@ export default function Hero() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, delay: 0.45 }}
             >
-              <a href="#menu" className="btn-primary">
-                View Menu <HiArrowRight />
+              <a href={primaryBtn.href} className="btn-primary">
+                {primaryBtn.label} <HiArrowRight />
               </a>
-              <a href="#contact" className="btn-outline">
-                Get Started
+              <a href={secondaryBtn.href} className="btn-outline">
+                {secondaryBtn.label}
               </a>
             </motion.div>
 
@@ -125,18 +152,12 @@ export default function Hero() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, delay: 0.6 }}
             >
-              <div className="hero-stat">
-                <div className="hero-stat-num">5K+</div>
-                <div className="hero-stat-label">Meals Delivered</div>
-              </div>
-              <div className="hero-stat">
-                <div className="hero-stat-num">1K+</div>
-                <div className="hero-stat-label">Happy Clients</div>
-              </div>
-              <div className="hero-stat">
-                <div className="hero-stat-num">100%</div>
-                <div className="hero-stat-label">Fresh Ingredients</div>
-              </div>
+              {stats.map((s, i) => (
+                <div className="hero-stat" key={s.label || i}>
+                  <div className="hero-stat-num">{s.num}</div>
+                  <div className="hero-stat-label">{s.label}</div>
+                </div>
+              ))}
             </motion.div>
           </motion.div>
 
@@ -160,7 +181,7 @@ export default function Hero() {
                 transition={{ type: "spring", stiffness: 100, damping: 30 }}
               >
                 <motion.img
-                  src="https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?w=1200&q=85"
+                  src={h.image}
                   alt="Healthy meal bowl"
                   className="hero-main-img"
                   initial={{ opacity: 0, scale: 0.8, y: 40 }}
@@ -178,9 +199,9 @@ export default function Hero() {
                   transform: `translate(${mousePos.x * 8}px, ${mousePos.y * 8}px)`,
                 }}
               >
-                <div className="fc-label">Today's Special</div>
-                <div className="fc-val">₹490</div>
-                <div className="fc-sub">Harmony Bowl</div>
+                <div className="fc-label">{floatCards[0]?.label}</div>
+                <div className="fc-val">{floatCards[0]?.val}</div>
+                <div className="fc-sub">{floatCards[0]?.sub}</div>
               </motion.div>
 
               <motion.div
@@ -192,9 +213,9 @@ export default function Hero() {
                   transform: `translate(${mousePos.x * -6}px, ${mousePos.y * -6}px)`,
                 }}
               >
-                <div className="fc-label">Avg. Protein</div>
-                <div className="fc-val">35g</div>
-                <div className="fc-sub">Per meal</div>
+                <div className="fc-label">{floatCards[1]?.label}</div>
+                <div className="fc-val">{floatCards[1]?.val}</div>
+                <div className="fc-sub">{floatCards[1]?.sub}</div>
               </motion.div>
             </div>
           </motion.div>

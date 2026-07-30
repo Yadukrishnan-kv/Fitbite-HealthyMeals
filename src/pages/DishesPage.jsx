@@ -2,7 +2,8 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Link } from "react-router-dom";
 import { HiArrowLeft, HiArrowRight } from "react-icons/hi";
-import { dishes } from "../data/dishes";
+import { useResource } from "../hooks/useResource";
+import { useSetting, useDocumentMeta } from "../context/SiteContext";
 import "../styles/dishes.css";
 
 const filters = [
@@ -12,13 +13,34 @@ const filters = [
   { key: "weight-loss", label: "Weight Loss" },
 ];
 
+function catList(dish) {
+  if (Array.isArray(dish.categories)) return dish.categories;
+  if (typeof dish.category === "string") return dish.category.split(/\s+/);
+  return [];
+}
+
+function badgeFor(dish) {
+  const cats = catList(dish);
+  if (cats.includes("veg")) return "Veg";
+  if (cats.includes("high-protein")) return "High Protein";
+  return "Weight Loss";
+}
+
 export default function DishesPage() {
   const [activeFilter, setActiveFilter] = useState("all");
+  const { items: dishes, loading } = useResource("/dishes");
+  const phoneRaw = useSetting("phoneRaw", "918089839740");
+
+  useDocumentMeta({
+    title: useSetting("siteTitle", "Our Menu — Fitbite"),
+    description: useSetting("metaDescription", ""),
+    keywords: useSetting("metaKeywords", ""),
+  });
 
   const filtered =
     activeFilter === "all"
       ? dishes
-      : dishes.filter((d) => d.category.includes(activeFilter));
+      : dishes.filter((d) => catList(d).includes(activeFilter));
 
   return (
     <section className="section dishes-section" style={{ paddingTop: "105px" }}>
@@ -90,12 +112,18 @@ export default function DishesPage() {
         <div className="dishes-grid">
           <AnimatePresence mode="popLayout">
             {filtered.map((dish, i) => (
-              <DishCard key={dish.id} dish={dish} index={i} />
+              <DishCard key={dish._id || dish.id} dish={dish} index={i} phoneRaw={phoneRaw} />
             ))}
           </AnimatePresence>
         </div>
 
-        {filtered.length === 0 && (
+        {loading && (
+          <p style={{ textAlign: "center", color: "var(--text-muted)", padding: "60px 0", fontSize: 16 }}>
+            Loading menu…
+          </p>
+        )}
+
+        {!loading && filtered.length === 0 && (
           <p style={{ textAlign: "center", color: "var(--text-muted)", padding: "60px 0", fontSize: 16 }}>
             No dishes found for this category.
           </p>
@@ -105,7 +133,7 @@ export default function DishesPage() {
   );
 }
 
-function DishCard({ dish, index }) {
+function DishCard({ dish, index, phoneRaw }) {
   const [tilt, setTilt] = useState({ x: 0, y: 0 });
 
   const handleMouseMove = (e) => {
@@ -136,9 +164,7 @@ function DishCard({ dish, index }) {
     >
       <div className="dish-img-wrap">
         <img src={dish.image} alt={dish.name} className="dish-img" loading="lazy" />
-        <span className="dish-cat-badge">
-          {dish.category.includes("veg") ? "Veg" : dish.category.includes("high-protein") ? "High Protein" : "Weight Loss"}
-        </span>
+        <span className="dish-cat-badge">{badgeFor(dish)}</span>
       </div>
       <div className="dish-body">
         <h3 className="dish-name">{dish.name}</h3>
@@ -155,7 +181,7 @@ function DishCard({ dish, index }) {
           <div className="dish-footer">
           <div className="dish-price">₹{dish.price}</div>
           <a
-            href={`https://wa.me/918089839740?text=Hi%20Fitbite!%20I'd%20like%20to%20order%20the%20${encodeURIComponent(dish.name)}`}
+            href={`https://wa.me/${phoneRaw}?text=Hi%20Fitbite!%20I'd%20like%20to%20order%20the%20${encodeURIComponent(dish.name)}`}
             target="_blank"
             rel="noopener noreferrer"
             className="dish-order-btn"
