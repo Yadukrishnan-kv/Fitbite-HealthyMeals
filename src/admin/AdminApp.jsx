@@ -1,6 +1,7 @@
 import { Routes, Route, Navigate } from 'react-router-dom';
 import './admin.css';
 
+import { ThemeProvider } from './context/ThemeContext';
 import { AuthProvider } from './context/AuthContext';
 import { ToastProvider } from './context/ToastContext';
 import { ConfirmProvider } from './context/ConfirmContext';
@@ -30,6 +31,7 @@ import ProfilePage from './pages/ProfilePage';
  */
 export default function AdminApp() {
   return (
+    <ThemeProvider>
     <AuthProvider>
       <ToastProvider>
         <ConfirmProvider>
@@ -86,5 +88,6 @@ export default function AdminApp() {
         </ConfirmProvider>
       </ToastProvider>
     </AuthProvider>
+    </ThemeProvider>
   );
 }

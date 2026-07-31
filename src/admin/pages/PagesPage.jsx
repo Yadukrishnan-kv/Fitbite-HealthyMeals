@@ -1,9 +1,10 @@
 import { useCallback, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { LuSearch, LuExternalLink } from 'react-icons/lu';
 import { api, qs } from '../api/client';
 import { useToast } from '../context/ToastContext';
 import { useConfirm } from '../context/ConfirmContext';
-import { Button, Spinner, Badge, PageHeader, EmptyState } from '../components/ui';
+import { Button, Badge, PageHeader, EmptyState, SkeletonTable } from '../components/ui';
 
 const ENDPOINT = '/admin/pages';
 
@@ -66,11 +67,14 @@ export function PagesPage() {
       />
 
       <div className="admin-toolbar">
-        <input className="admin-input admin-search" placeholder="Search pages…" value={q} onChange={(e) => setQ(e.target.value)} />
+        <div className="admin-input-icon">
+          <LuSearch />
+          <input className="admin-input admin-search" placeholder="Search pages…" value={q} onChange={(e) => setQ(e.target.value)} />
+        </div>
       </div>
 
       {loading ? (
-        <div className="admin-loading"><Spinner /></div>
+        <SkeletonTable rows={5} cols={4} />
       ) : items.length === 0 ? (
         <EmptyState icon="📄" title="No pages found" />
       ) : (
@@ -86,8 +90,8 @@ export function PagesPage() {
                     <strong>{p.title}</strong>{' '}
                     {p.isSystem && <Badge tone="blue">system</Badge>}
                   </td>
-                  <td><code>/{p.slug}</code></td>
-                  <td><Badge tone={p.status === 'published' ? 'green' : 'gray'}>{p.status}</Badge></td>
+                  <td><code className="admin-code">/{p.slug}</code></td>
+                  <td><Badge tone={p.status === 'published' ? 'green' : 'gray'} dot>{p.status}</Badge></td>
                   <td className="admin-row-actions">
                     <a
                       className="admin-btn admin-btn--ghost admin-btn--sm"
@@ -95,7 +99,7 @@ export function PagesPage() {
                       target="_blank"
                       rel="noreferrer"
                     >
-                      Preview
+                      <LuExternalLink /> Preview
                     </a>
                     <Button variant="ghost" size="sm" onClick={() => togglePublish(p)}>
                       {p.status === 'published' ? 'Unpublish' : 'Publish'}

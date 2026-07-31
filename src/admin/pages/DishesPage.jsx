@@ -1,7 +1,7 @@
 import ResourceList from '../components/ResourceList';
 import ResourceForm from '../components/ResourceForm';
 import InlineToggle from '../components/InlineToggle';
-import { Badge } from '../components/ui';
+import { Badge, Stars } from '../components/ui';
 
 const ENDPOINT = '/admin/dishes';
 const BACK = '/admin/dishes';
@@ -11,15 +11,56 @@ export function DishesPage() {
     {
       key: 'image',
       header: '',
-      width: '64px',
-      render: (r) => (r.image ? <img className="admin-thumb" src={r.image} alt="" /> : <div className="admin-thumb admin-thumb--empty" />),
+      width: '72px',
+      render: (r) =>
+        r.image ? (
+          <img className="admin-thumb" src={r.image} alt="" style={{ width: 56, height: 56, borderRadius: 12 }} />
+        ) : (
+          <div className="admin-thumb admin-thumb--empty" style={{ width: 56, height: 56, borderRadius: 12 }}>🥗</div>
+        ),
     },
-    { key: 'name', header: 'Name', render: (r) => <strong>{r.name}</strong> },
-    { key: 'price', header: 'Price', render: (r) => `₹${r.price}` },
+    {
+      key: 'name',
+      header: 'Dish',
+      render: (r) => (
+        <div>
+          <strong style={{ fontSize: 14 }}>{r.name}</strong>
+          {(r.calories || r.protein) && (
+            <div style={{ marginTop: 4, display: 'flex', gap: 6, flexWrap: 'wrap' }}>
+              {r.calories ? <Badge tone="gray">{r.calories} kcal</Badge> : null}
+              {r.protein ? <Badge tone="green">{r.protein} protein</Badge> : null}
+              {r.carbs ? <Badge tone="amber">{r.carbs} carbs</Badge> : null}
+            </div>
+          )}
+        </div>
+      ),
+    },
+    {
+      key: 'price',
+      header: 'Price',
+      render: (r) => <span style={{ fontWeight: 800, fontSize: 15, color: 'var(--a-primary-600)' }}>₹{r.price}</span>,
+    },
+    {
+      key: 'rating',
+      header: 'Rating',
+      render: (r) =>
+        r.rating ? (
+          <span style={{ display: 'inline-flex', alignItems: 'center', gap: 6 }}>
+            <Stars value={r.rating} />
+            <span className="admin-muted" style={{ fontSize: 12 }}>{r.rating}{r.reviews ? ` (${r.reviews})` : ''}</span>
+          </span>
+        ) : (
+          <span className="admin-muted">—</span>
+        ),
+    },
     {
       key: 'categories',
       header: 'Categories',
-      render: (r) => (r.categories || []).map((c) => <Badge key={c}>{c}</Badge>),
+      render: (r) => (
+        <span style={{ display: 'inline-flex', gap: 5, flexWrap: 'wrap' }}>
+          {(r.categories || []).map((c) => <Badge key={c} tone="primary">{c}</Badge>)}
+        </span>
+      ),
     },
     {
       key: 'isAvailable',

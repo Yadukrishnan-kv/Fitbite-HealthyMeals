@@ -1,8 +1,9 @@
 import { useCallback, useEffect, useState } from 'react';
+import { LuSearch, LuUpload, LuX } from 'react-icons/lu';
 import { api, qs } from '../api/client';
 import { useToast } from '../context/ToastContext';
 import { useConfirm } from '../context/ConfirmContext';
-import { Button, Spinner, EmptyState, PageHeader, Field, Input } from '../components/ui';
+import { Button, EmptyState, PageHeader, Field, Input, Skeleton } from '../components/ui';
 
 export default function MediaPage() {
   const toast = useToast();
@@ -109,23 +110,30 @@ export default function MediaPage() {
         subtitle={`${total} file(s)`}
         actions={
           <label className="admin-btn admin-btn--primary">
-            {uploading ? 'Uploading…' : '+ Upload image'}
+            <LuUpload /> {uploading ? 'Uploading…' : 'Upload image'}
             <input type="file" accept="image/*" hidden onChange={handleUpload} disabled={uploading} />
           </label>
         }
       />
 
       <div className="admin-toolbar">
-        <input
-          className="admin-input admin-search"
-          placeholder="Search by name or alt text…"
-          value={q}
-          onChange={(e) => setQ(e.target.value)}
-        />
+        <div className="admin-input-icon">
+          <LuSearch />
+          <input
+            className="admin-input admin-search"
+            placeholder="Search by name or alt text…"
+            value={q}
+            onChange={(e) => setQ(e.target.value)}
+          />
+        </div>
       </div>
 
       {loading ? (
-        <div className="admin-loading"><Spinner /></div>
+        <div className="admin-media-grid">
+          {Array.from({ length: 10 }).map((_, i) => (
+            <Skeleton key={i} style={{ aspectRatio: '1 / 1', borderRadius: 'var(--a-radius)' }} />
+          ))}
+        </div>
       ) : items.length === 0 ? (
         <EmptyState icon="🖼️" title="No media yet">
           <label className="admin-btn admin-btn--primary">
@@ -174,7 +182,7 @@ function MediaDetail({ item, onClose, onSaveAlt, onDelete }) {
       <div className="admin-modal admin-modal--lg" onClick={(e) => e.stopPropagation()} role="dialog" aria-modal="true">
         <div className="admin-modal-header">
           <h3 className="admin-modal-title admin-truncate">{item.originalName}</h3>
-          <Button variant="ghost" size="sm" onClick={onClose}>✕</Button>
+          <Button variant="ghost" size="sm" onClick={onClose}><LuX /></Button>
         </div>
 
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20 }}>

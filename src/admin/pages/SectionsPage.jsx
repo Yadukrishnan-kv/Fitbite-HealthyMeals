@@ -1,8 +1,9 @@
 import { useCallback, useEffect, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
+import { LuChevronUp, LuChevronDown } from 'react-icons/lu';
 import { api } from '../api/client';
 import { useToast } from '../context/ToastContext';
-import { Field, Input, Textarea, Button, Spinner, PageHeader, Badge } from '../components/ui';
+import { Field, Input, Textarea, Button, Spinner, PageHeader, Badge, SkeletonTable } from '../components/ui';
 import InlineToggle from '../components/InlineToggle';
 
 const ENDPOINT = '/admin/sections';
@@ -40,7 +41,12 @@ export function SectionsPage() {
     }
   };
 
-  if (loading) return <div className="admin-loading"><Spinner /></div>;
+  if (loading) return (
+    <div>
+      <PageHeader title="Homepage Sections" subtitle="Reorder, show/hide, and edit the content blocks of the homepage" />
+      <SkeletonTable rows={6} cols={4} />
+    </div>
+  );
 
   return (
     <div>
@@ -54,8 +60,8 @@ export function SectionsPage() {
             {items.map((s, i) => (
               <tr key={s._id}>
                 <td className="admin-reorder">
-                  <button className="admin-icon-btn" disabled={i === 0} onClick={() => move(i, -1)} aria-label="Up">▲</button>
-                  <button className="admin-icon-btn" disabled={i === items.length - 1} onClick={() => move(i, 1)} aria-label="Down">▼</button>
+                  <button className="admin-icon-btn" disabled={i === 0} onClick={() => move(i, -1)} aria-label="Up"><LuChevronUp /></button>
+                  <button className="admin-icon-btn" disabled={i === items.length - 1} onClick={() => move(i, 1)} aria-label="Down"><LuChevronDown /></button>
                 </td>
                 <td><strong>{s.name}</strong> <Badge>{s.key}</Badge></td>
                 <td className="admin-truncate">{s.title || <span className="admin-muted">—</span>}</td>

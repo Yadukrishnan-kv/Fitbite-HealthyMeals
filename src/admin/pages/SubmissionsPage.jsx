@@ -1,9 +1,10 @@
 import { useCallback, useEffect, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
+import { LuSearch, LuFilter } from 'react-icons/lu';
 import { api, qs } from '../api/client';
 import { useToast } from '../context/ToastContext';
 import { useConfirm } from '../context/ConfirmContext';
-import { Button, Spinner, EmptyState, PageHeader, Badge, Field, Input } from '../components/ui';
+import { Button, Spinner, EmptyState, PageHeader, Badge, Field, Input, SkeletonTable } from '../components/ui';
 
 const STATUS_TONE = { new: 'green', read: 'gray', archived: 'amber' };
 const STATUSES = ['', 'new', 'read', 'archived'];
@@ -54,26 +55,31 @@ export function SubmissionsPage() {
       <PageHeader title="Form Submissions" subtitle={`${total} total`} />
 
       <div className="admin-toolbar">
-        <input
-          className="admin-input admin-search"
-          placeholder="Search name, email, message…"
-          value={q}
-          onChange={(e) => { setPage(1); setQ(e.target.value); }}
-        />
-        <select
-          className="admin-input"
-          style={{ maxWidth: 160 }}
-          value={status}
-          onChange={(e) => { setPage(1); setStatus(e.target.value); }}
-        >
-          {STATUSES.map((s) => (
-            <option key={s || 'all'} value={s}>{s ? s[0].toUpperCase() + s.slice(1) : 'All statuses'}</option>
-          ))}
-        </select>
+        <div className="admin-input-icon">
+          <LuSearch />
+          <input
+            className="admin-input admin-search"
+            placeholder="Search name, email, message…"
+            value={q}
+            onChange={(e) => { setPage(1); setQ(e.target.value); }}
+          />
+        </div>
+        <div className="admin-input-icon" style={{ maxWidth: 190, flex: 'none' }}>
+          <LuFilter />
+          <select
+            className="admin-input"
+            value={status}
+            onChange={(e) => { setPage(1); setStatus(e.target.value); }}
+          >
+            {STATUSES.map((s) => (
+              <option key={s || 'all'} value={s}>{s ? s[0].toUpperCase() + s.slice(1) : 'All statuses'}</option>
+            ))}
+          </select>
+        </div>
       </div>
 
       {loading ? (
-        <div className="admin-loading"><Spinner /></div>
+        <SkeletonTable rows={6} cols={5} />
       ) : items.length === 0 ? (
         <EmptyState icon="📥" title="No submissions found" />
       ) : (

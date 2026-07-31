@@ -97,9 +97,9 @@ export default function ResourceForm({
             </div>
           ))}
         </div>
-        <div className="admin-form-actions">
+        <div className="admin-form-actions admin-form-actions--sticky">
           <Link to={backPath} className="admin-btn admin-btn--ghost">Cancel</Link>
-          <Button type="submit" loading={saving}>{isNew ? 'Create' : 'Save changes'}</Button>
+          <Button type="submit" loading={saving}>{isNew ? `Create ${title}` : 'Save changes'}</Button>
         </div>
       </form>
     </div>
@@ -163,7 +163,7 @@ function FieldControl({ field, value, error, onChange }) {
     default:
       return (
         <Field label={field.label} hint={field.hint} error={error} required={field.required}>
-          <Input type="text" {...common} value={value ?? ''} onChange={(e) => onChange(e.target.value)} />
+          <Input type="text" error={!!error} {...common} value={value ?? ''} onChange={(e) => onChange(e.target.value)} />
         </Field>
       );
   }

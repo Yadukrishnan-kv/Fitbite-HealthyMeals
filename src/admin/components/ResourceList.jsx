@@ -1,9 +1,11 @@
 import { useCallback, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { AnimatePresence, motion } from 'framer-motion';
+import { LuSearch, LuChevronUp, LuChevronDown } from 'react-icons/lu';
 import { api, qs } from '../api/client';
 import { useToast } from '../context/ToastContext';
 import { useConfirm } from '../context/ConfirmContext';
-import { Button, Spinner, EmptyState, PageHeader } from './ui';
+import { Button, EmptyState, PageHeader, SkeletonTable } from './ui';
 
 /**
  * Generic list screen: search, pagination, optional up/down reorder, and a
@@ -101,21 +103,24 @@ export default function ResourceList({
 
       {searchable && (
         <div className="admin-toolbar">
-          <input
-            className="admin-input admin-search"
-            placeholder="Search…"
-            value={q}
-            onChange={(e) => {
-              setPage(1);
-              setQ(e.target.value);
-            }}
-          />
+          <div className="admin-input-icon">
+            <LuSearch />
+            <input
+              className="admin-input admin-search"
+              placeholder="Search…"
+              value={q}
+              onChange={(e) => {
+                setPage(1);
+                setQ(e.target.value);
+              }}
+            />
+          </div>
           <span className="admin-count">{total} total</span>
         </div>
       )}
 
       {loading ? (
-        <div className="admin-loading"><Spinner /></div>
+        <SkeletonTable rows={6} cols={columns.length + 1} />
       ) : items.length === 0 ? (
         <EmptyState icon={emptyIcon} title="Nothing here yet">
           {createPath && (
@@ -126,46 +131,57 @@ export default function ResourceList({
         </EmptyState>
       ) : (
         <div className="admin-table-wrap">
-          <table className="admin-table">
-            <thead>
-              <tr>
-                {reorderable && <th className="admin-th-order">Order</th>}
-                {columns.map((c) => (
-                  <th key={c.key} style={c.width ? { width: c.width } : undefined}>
-                    {c.header}
-                  </th>
-                ))}
-                <th className="admin-th-actions">Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {items.map((row, i) => (
-                <tr key={row._id}>
-                  {reorderable && (
-                    <td className="admin-reorder">
-                      <button className="admin-icon-btn" disabled={i === 0} onClick={() => move(i, -1)} aria-label="Move up">▲</button>
-                      <button className="admin-icon-btn" disabled={i === items.length - 1} onClick={() => move(i, 1)} aria-label="Move down">▼</button>
-                    </td>
-                  )}
+          <div className="admin-table-scroll">
+            <table className="admin-table">
+              <thead>
+                <tr>
+                  {reorderable && <th className="admin-th-order">Order</th>}
                   {columns.map((c) => (
-                    <td key={c.key}>{c.render ? c.render(row, { refresh: load }) : row[c.key]}</td>
+                    <th key={c.key} style={c.width ? { width: c.width } : undefined}>
+                      {c.header}
+                    </th>
                   ))}
-                  <td className="admin-row-actions">
-                    {editPath && (
-                      <Link to={editPath(row)} className="admin-btn admin-btn--ghost admin-btn--sm">
-                        Edit
-                      </Link>
-                    )}
-                    {deletable && (
-                      <Button variant="danger" size="sm" onClick={() => handleDelete(row)}>
-                        Delete
-                      </Button>
-                    )}
-                  </td>
+                  <th className="admin-th-actions">Actions</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                <AnimatePresence initial={false}>
+                  {items.map((row, i) => (
+                    <motion.tr
+                      key={row._id}
+                      layout
+                      initial={{ opacity: 0, y: 8 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, x: -12 }}
+                      transition={{ duration: 0.24, delay: Math.min(i * 0.03, 0.25) }}
+                    >
+                      {reorderable && (
+                        <td className="admin-reorder">
+                          <button className="admin-icon-btn" disabled={i === 0} onClick={() => move(i, -1)} aria-label="Move up"><LuChevronUp /></button>
+                          <button className="admin-icon-btn" disabled={i === items.length - 1} onClick={() => move(i, 1)} aria-label="Move down"><LuChevronDown /></button>
+                        </td>
+                      )}
+                      {columns.map((c) => (
+                        <td key={c.key}>{c.render ? c.render(row, { refresh: load }) : row[c.key]}</td>
+                      ))}
+                      <td className="admin-row-actions">
+                        {editPath && (
+                          <Link to={editPath(row)} className="admin-btn admin-btn--ghost admin-btn--sm">
+                            Edit
+                          </Link>
+                        )}
+                        {deletable && (
+                          <Button variant="danger" size="sm" onClick={() => handleDelete(row)}>
+                            Delete
+                          </Button>
+                        )}
+                      </td>
+                    </motion.tr>
+                  ))}
+                </AnimatePresence>
+              </tbody>
+            </table>
+          </div>
         </div>
       )}
 

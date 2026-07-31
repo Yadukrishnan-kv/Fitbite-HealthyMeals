@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
+import { LuListTree, LuLink, LuArrowRight, LuChevronUp, LuChevronDown } from 'react-icons/lu';
 import { api } from '../api/client';
 import { useToast } from '../context/ToastContext';
 import { useConfirm } from '../context/ConfirmContext';
@@ -32,12 +33,16 @@ export function MenusPage() {
       ) : (
         <div className="admin-stat-grid">
           {menus.map((m) => (
-            <Link key={m._id} to={`/admin/menus/${m._id}`} className="admin-stat-card">
-              <span className="admin-stat-icon">{m.location === 'footer' ? '📎' : '🧭'}</span>
-              <span className="admin-stat-value" style={{ fontSize: 18 }}>{m.name}</span>
-              <span className="admin-stat-label">
-                <Badge tone="gray">{m.location}</Badge> {m.description}
-              </span>
+            <Link key={m._id} to={`/admin/menus/${m._id}`} className="admin-kpi">
+              <div className="admin-kpi-top">
+                <span className="admin-kpi-icon">{m.location === 'footer' ? <LuLink /> : <LuListTree />}</span>
+                <LuArrowRight style={{ color: 'var(--a-muted)' }} />
+              </div>
+              <div style={{ fontSize: 17, fontWeight: 750, letterSpacing: '-0.01em' }}>{m.name}</div>
+              <div className="admin-kpi-label" style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                <Badge tone="primary">{m.location}</Badge>
+                <span>{m.description}</span>
+              </div>
             </Link>
           ))}
         </div>
@@ -221,8 +226,8 @@ function MenuRow({ item, child, isFirst, isLast, onUp, onDown, onToggle, onEdit,
   return (
     <div className={`admin-menu-item-row${child ? ' admin-menu-item-row--child' : ''}`}>
       <div className="admin-reorder">
-        <button className="admin-icon-btn" disabled={isFirst} onClick={onUp} aria-label="Move up">▲</button>
-        <button className="admin-icon-btn" disabled={isLast} onClick={onDown} aria-label="Move down">▼</button>
+        <button className="admin-icon-btn" disabled={isFirst} onClick={onUp} aria-label="Move up"><LuChevronUp /></button>
+        <button className="admin-icon-btn" disabled={isLast} onClick={onDown} aria-label="Move down"><LuChevronDown /></button>
       </div>
       <div className="admin-menu-item-main">
         <div className="admin-menu-item-label">
