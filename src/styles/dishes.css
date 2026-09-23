@@ -12,6 +12,41 @@
   margin: 0 auto;
 }
 
+.menu-type-tabs {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  margin-bottom: 20px;
+  padding: 6px;
+  background: rgba(11, 11, 11, 0.03);
+  border-radius: var(--radius-full);
+  width: fit-content;
+}
+
+.menu-type-tab {
+  padding: 10px 26px;
+  border-radius: var(--radius-full);
+  border: none;
+  background: transparent;
+  color: var(--text-muted);
+  font-size: 14px;
+  font-weight: 600;
+  transition: all var(--transition-fast);
+  font-family: var(--font-body);
+  letter-spacing: 0.3px;
+}
+
+.menu-type-tab.active {
+  background: var(--gradient-green);
+  color: var(--white);
+  box-shadow: var(--shadow-green);
+}
+
+.menu-type-tab:hover:not(.active) {
+  color: var(--dark-text);
+}
+
 .dishes-filters {
   display: flex;
   gap: 10px;
@@ -215,6 +250,11 @@
   .filter-btn {
     padding: 8px 18px;
     font-size: 12px;
+  }
+
+  .menu-type-tab {
+    padding: 8px 18px;
+    font-size: 13px;
   }
 
   .dish-meta span {

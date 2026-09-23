@@ -4,9 +4,10 @@ import InlineToggle from '../components/InlineToggle';
 import { Badge, Stars } from '../components/ui';
 
 const ENDPOINT = '/admin/dishes';
-const BACK = '/admin/salads';
+const BACK = '/admin/lunch';
+const TYPE = 'lunch';
 
-export function SaladsPage() {
+export function LunchPage() {
   const columns = [
     {
       key: 'image',
@@ -16,12 +17,12 @@ export function SaladsPage() {
         r.image ? (
           <img className="admin-thumb" src={r.image} alt="" style={{ width: 56, height: 56, borderRadius: 12 }} />
         ) : (
-          <div className="admin-thumb admin-thumb--empty" style={{ width: 56, height: 56, borderRadius: 12 }}>🥗</div>
+          <div className="admin-thumb admin-thumb--empty" style={{ width: 56, height: 56, borderRadius: 12 }}>🍱</div>
         ),
     },
     {
       key: 'name',
-      header: 'Salad',
+      header: 'Lunch item',
       render: (r) => (
         <div>
           <strong style={{ fontSize: 14 }}>{r.name}</strong>
@@ -71,30 +72,30 @@ export function SaladsPage() {
 
   return (
     <ResourceList
-      title="Salads"
-      subtitle="Menu items shown on the site"
+      title="Lunch"
+      subtitle="Lunch menu items shown on the site"
       endpoint={ENDPOINT}
-      filters={{ type: 'salad' }}
+      filters={{ type: TYPE }}
       columns={columns}
-      editPath={(r) => `/admin/salads/${r._id}`}
-      createPath="/admin/salads/new"
-      createLabel="New Salad"
+      editPath={(r) => `/admin/lunch/${r._id}`}
+      createPath="/admin/lunch/new"
+      createLabel="New Lunch Item"
       reorderable
-      emptyIcon="🥗"
+      emptyIcon="🍱"
       cardVariant="product"
     />
   );
 }
 
-export function SaladEdit() {
+export function LunchEdit() {
   const fields = [
     { name: 'name', label: 'Name', type: 'text', required: true, full: true },
     { name: 'desc', label: 'Description', type: 'textarea', full: true },
     { name: 'price', label: 'Price (₹)', type: 'number', required: true },
-    { name: 'categories', label: 'Categories', type: 'tags', hint: 'e.g. high-protein, veg, weight-loss' },
+    { name: 'categories', label: 'Categories', type: 'tags', hint: 'e.g. veg, non-veg, high-protein' },
     { name: 'calories', label: 'Calories', type: 'number' },
-    { name: 'protein', label: 'Protein', type: 'text', placeholder: '38g' },
-    { name: 'carbs', label: 'Carbs', type: 'text', placeholder: '12g' },
+    { name: 'protein', label: 'Protein', type: 'text', placeholder: '28g' },
+    { name: 'carbs', label: 'Carbs', type: 'text', placeholder: '55g' },
     { name: 'rating', label: 'Rating (0–5)', type: 'number', step: '0.1' },
     { name: 'reviews', label: 'Reviews count', type: 'number' },
     { name: 'image', label: 'Image', type: 'image', full: true },
@@ -103,12 +104,12 @@ export function SaladEdit() {
 
   return (
     <ResourceForm
-      title="Salad"
+      title="Lunch item"
       endpoint={ENDPOINT}
       backPath={BACK}
       fields={fields}
-      defaults={{ type: 'salad', isAvailable: true, categories: [], price: 0, rating: 0, reviews: 0, calories: 0 }}
-      toApi={(values) => ({ ...values, type: 'salad' })}
+      defaults={{ type: TYPE, isAvailable: true, categories: [], price: 0, rating: 0, reviews: 0, calories: 0 }}
+      toApi={(values) => ({ ...values, type: TYPE })}
     />
   );
 }

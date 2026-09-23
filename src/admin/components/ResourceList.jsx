@@ -24,6 +24,8 @@ export default function ResourceList({
   reorderable = false,
   deletable = true,
   emptyIcon = '📭',
+  filters = {},
+  cardVariant,
 }) {
   const toast = useToast();
   const confirm = useConfirm();
@@ -36,10 +38,12 @@ export default function ResourceList({
 
   const limit = reorderable ? 100 : 20;
 
+  const filterKey = JSON.stringify(filters);
+
   const load = useCallback(async () => {
     setLoading(true);
     try {
-      const data = await api.get(`${endpoint}${qs({ q, page, limit })}`);
+      const data = await api.get(`${endpoint}${qs({ ...filters, q, page, limit })}`);
       setItems(data.items || []);
       setTotal(data.total ?? (data.items || []).length);
       setPages(data.pages || 1);
@@ -48,7 +52,8 @@ export default function ResourceList({
     } finally {
       setLoading(false);
     }
-  }, [endpoint, q, page, limit, toast]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [endpoint, q, page, limit, toast, filterKey]);
 
   useEffect(() => {
     load();
@@ -132,7 +137,7 @@ export default function ResourceList({
       ) : (
         <div className="admin-table-wrap">
           <div className="admin-table-scroll">
-            <table className="admin-table">
+            <table className={`admin-table${cardVariant ? ` admin-table--${cardVariant}` : ''}`}>
               <thead>
                 <tr>
                   {reorderable && <th className="admin-th-order">Order</th>}
@@ -162,7 +167,9 @@ export default function ResourceList({
                         </td>
                       )}
                       {columns.map((c) => (
-                        <td key={c.key}>{c.render ? c.render(row, { refresh: load }) : row[c.key]}</td>
+                        <td key={c.key} data-label={c.header} className={`admin-td-${c.key}`}>
+                          {c.render ? c.render(row, { refresh: load }) : row[c.key]}
+                        </td>
                       ))}
                       <td className="admin-row-actions">
                         {editPath && (

@@ -1,12 +1,21 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import { HiArrowLeft, HiArrowRight } from "react-icons/hi";
 import { useResource } from "../hooks/useResource";
+import { qs } from "../api/publicClient";
 import { useSetting, useDocumentMeta } from "../context/SiteContext";
 import "../styles/dishes.css";
 
-const filters = [
+// Top-level menu types. Each maps to the Dish model's `type` field.
+const MENU_TYPES = [
+  { key: "salad", label: "Salad", tag: "Our Menu", title: "Chef-Crafted Power Bowls" },
+  { key: "lunch", label: "Lunch", tag: "Midday Meals", title: "Fresh & Filling Lunch" },
+  { key: "wrap", label: "Wrap", tag: "On The Go", title: "Hand-Rolled Wraps" },
+];
+
+// Fixed sub-filters for the Salads menu (kept as-is so existing behaviour doesn't change).
+const DISH_FILTERS = [
   { key: "all", label: "All" },
   { key: "high-protein", label: "High Protein" },
   { key: "veg", label: "Veg" },
@@ -19,23 +28,49 @@ function catList(dish) {
   return [];
 }
 
+function labelize(key) {
+  return key.replace(/-/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
+}
+
 function badgeFor(dish) {
   const cats = catList(dish);
   if (cats.includes("veg")) return "Veg";
   if (cats.includes("high-protein")) return "High Protein";
-  return "Weight Loss";
+  if (cats.length) return labelize(cats[0]);
+  return "";
 }
 
+const TYPE_KEYS = MENU_TYPES.map((m) => m.key);
+
 export default function DishesPage() {
+  const [searchParams] = useSearchParams();
+  const initialType = TYPE_KEYS.includes(searchParams.get("type")) ? searchParams.get("type") : "salad";
+  const [activeType, setActiveType] = useState(initialType);
   const [activeFilter, setActiveFilter] = useState("all");
-  const { items: dishes, loading } = useResource("/dishes");
+  const { items: dishes, loading } = useResource(`/dishes${qs({ type: activeType })}`, { deps: [activeType] });
   const phoneRaw = useSetting("phoneRaw", "918089839740");
+
+  const meta = MENU_TYPES.find((m) => m.key === activeType);
+
+  // Dishes keep their fixed filter set; Lunch/Wraps derive filters from whatever
+  // categories the admin has tagged their items with, so no extra config is needed.
+  const subFilters = useMemo(() => {
+    if (activeType === "salad") return DISH_FILTERS;
+    const cats = new Set();
+    dishes.forEach((d) => catList(d).forEach((c) => cats.add(c)));
+    return [{ key: "all", label: "All" }, ...[...cats].sort().map((c) => ({ key: c, label: labelize(c) }))];
+  }, [activeType, dishes]);
 
   useDocumentMeta({
     title: useSetting("siteTitle", "Our Menu — Fitbite"),
     description: useSetting("metaDescription", ""),
     keywords: useSetting("metaKeywords", ""),
   });
+
+  const handleTypeChange = (type) => {
+    setActiveType(type);
+    setActiveFilter("all");
+  };
 
   const filtered =
     activeFilter === "all"
@@ -67,47 +102,60 @@ export default function DishesPage() {
         <div className="dishes-header" style={{ textAlign: "left" }}>
           <motion.span
             className="section-tag"
+            key={`tag-${activeType}`}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
           >
-            Our Menu
+            {meta.tag}
           </motion.span>
           <motion.h2
             className="section-title"
+            key={`title-${activeType}`}
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.1 }}
           >
-            Chef-Crafted <em>Power Bowls</em>
+            {meta.title}
           </motion.h2>
-          <motion.p
-            className="section-sub"
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-          >
-            Every bowl is a carefully balanced meal designed to fuel your performance and satisfy your cravings.
-          </motion.p>
         </div>
 
         <motion.div
-          className="dishes-filters"
+          className="menu-type-tabs"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.2 }}
-          style={{ justifyContent: "flex-start" }}
+          transition={{ duration: 0.5, delay: 0.1 }}
         >
-          {filters.map((f) => (
+          {MENU_TYPES.map((m) => (
             <button
-              key={f.key}
-              className={`filter-btn${activeFilter === f.key ? " active" : ""}`}
-              onClick={() => setActiveFilter(f.key)}
+              key={m.key}
+              className={`menu-type-tab${activeType === m.key ? " active" : ""}`}
+              onClick={() => handleTypeChange(m.key)}
             >
-              {f.label}
+              {m.label}
             </button>
           ))}
         </motion.div>
+
+        {subFilters.length > 1 && (
+          <motion.div
+            className="dishes-filters"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.2 }}
+            style={{ justifyContent: "flex-start" }}
+          >
+            {subFilters.map((f) => (
+              <button
+                key={f.key}
+                className={`filter-btn${activeFilter === f.key ? " active" : ""}`}
+                onClick={() => setActiveFilter(f.key)}
+              >
+                {f.label}
+              </button>
+            ))}
+          </motion.div>
+        )}
 
         <div className="dishes-grid">
           <AnimatePresence mode="popLayout">
@@ -125,7 +173,7 @@ export default function DishesPage() {
 
         {!loading && filtered.length === 0 && (
           <p style={{ textAlign: "center", color: "var(--text-muted)", padding: "60px 0", fontSize: 16 }}>
-            No dishes found for this category.
+            No items found for this category.
           </p>
         )}
       </div>
@@ -164,7 +212,7 @@ function DishCard({ dish, index, phoneRaw }) {
     >
       <div className="dish-img-wrap">
         <img src={dish.image} alt={dish.name} className="dish-img" loading="lazy" />
-        <span className="dish-cat-badge">{badgeFor(dish)}</span>
+        {badgeFor(dish) && <span className="dish-cat-badge">{badgeFor(dish)}</span>}
       </div>
       <div className="dish-body">
         <h3 className="dish-name">{dish.name}</h3>

@@ -1,12 +1,21 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Link } from "react-router-dom";
 import { HiArrowRight } from "react-icons/hi";
 import { useResource } from "../hooks/useResource";
+import { qs } from "../api/publicClient";
 import { useSetting } from "../context/SiteContext";
 import "../styles/dishes.css";
 
-const filters = [
+// Top-level menu types. Each maps to the Dish model's `type` field.
+const MENU_TYPES = [
+  { key: "salad", label: "Salad" },
+  { key: "lunch", label: "Lunch" },
+  { key: "wrap", label: "Wrap" },
+];
+
+// Fixed sub-filters for the Salads menu (kept as-is so existing behaviour doesn't change).
+const DISH_FILTERS = [
   { key: "all", label: "All" },
   { key: "high-protein", label: "High Protein" },
   { key: "veg", label: "Veg" },
@@ -20,17 +29,37 @@ function catList(dish) {
   return [];
 }
 
+function labelize(key) {
+  return key.replace(/-/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
+}
+
 function badgeFor(dish) {
   const cats = catList(dish);
   if (cats.includes("veg")) return "Veg";
   if (cats.includes("high-protein")) return "High Protein";
-  return "Weight Loss";
+  if (cats.length) return labelize(cats[0]);
+  return "";
 }
 
 export default function FeaturedDishes({ limit }) {
+  const [activeType, setActiveType] = useState("salad");
   const [activeFilter, setActiveFilter] = useState("all");
-  const { items: dishes, loading } = useResource("/dishes");
+  const { items: dishes, loading } = useResource(`/dishes${qs({ type: activeType })}`, { deps: [activeType] });
   const phoneRaw = useSetting("phoneRaw", "918089839740");
+
+  // Dishes keep their fixed filter set; Lunch/Wraps derive filters from whatever
+  // categories the admin has tagged their items with, so no extra config is needed.
+  const subFilters = useMemo(() => {
+    if (activeType === "salad") return DISH_FILTERS;
+    const cats = new Set();
+    dishes.forEach((d) => catList(d).forEach((c) => cats.add(c)));
+    return [{ key: "all", label: "All" }, ...[...cats].sort().map((c) => ({ key: c, label: labelize(c) }))];
+  }, [activeType, dishes]);
+
+  const handleTypeChange = (type) => {
+    setActiveType(type);
+    setActiveFilter("all");
+  };
 
   const filtered =
     activeFilter === "all"
@@ -73,22 +102,43 @@ export default function FeaturedDishes({ limit }) {
         </div>
 
         <motion.div
-          className="dishes-filters"
+          className="menu-type-tabs"
+          style={{ margin: "0 auto 20px" }}
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.5, delay: 0.2 }}
+          transition={{ duration: 0.5, delay: 0.15 }}
         >
-          {filters.map((f) => (
+          {MENU_TYPES.map((m) => (
             <button
-              key={f.key}
-              className={`filter-btn${activeFilter === f.key ? " active" : ""}`}
-              onClick={() => setActiveFilter(f.key)}
+              key={m.key}
+              className={`menu-type-tab${activeType === m.key ? " active" : ""}`}
+              onClick={() => handleTypeChange(m.key)}
             >
-              {f.label}
+              {m.label}
             </button>
           ))}
         </motion.div>
+
+        {subFilters.length > 1 && (
+          <motion.div
+            className="dishes-filters"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, delay: 0.2 }}
+          >
+            {subFilters.map((f) => (
+              <button
+                key={f.key}
+                className={`filter-btn${activeFilter === f.key ? " active" : ""}`}
+                onClick={() => setActiveFilter(f.key)}
+              >
+                {f.label}
+              </button>
+            ))}
+          </motion.div>
+        )}
 
         <div className="dishes-grid">
           <AnimatePresence mode="popLayout">
@@ -100,7 +150,7 @@ export default function FeaturedDishes({ limit }) {
 
         {!loading && filtered.length === 0 && (
           <p style={{ textAlign: "center", color: "var(--text-muted)", padding: "60px 0", fontSize: 16 }}>
-            No dishes found for this category.
+            No items found for this category.
           </p>
         )}
 
@@ -112,8 +162,12 @@ export default function FeaturedDishes({ limit }) {
             viewport={{ once: true }}
             transition={{ duration: 0.5, delay: 0.3 }}
           >
-            <Link to="/dishes" className="btn-outline" style={{ display: "inline-flex", alignItems: "center", gap: 8 }}>
-              View All Dishes <HiArrowRight />
+            <Link
+              to={`/dishes${qs({ type: activeType })}`}
+              className="btn-outline"
+              style={{ display: "inline-flex", alignItems: "center", gap: 8 }}
+            >
+              View Full Menu <HiArrowRight />
             </Link>
           </motion.div>
         )}

@@ -1152,6 +1152,142 @@ select.admin-input {
   .admin-breadcrumbs { display: none; }
 }
 
+/* Below this width a data table can't fit its columns without clipping or an
+   undiscoverable horizontal swipe, so each row becomes a self-contained card
+   instead (label/value pairs derived from each column's `header`). */
+@media (max-width: 640px) {
+  .admin-table-scroll { overflow-x: visible; }
+  .admin-table thead { display: none; }
+  .admin-table, .admin-table tbody { display: block; width: 100%; }
+  .admin-table tr { display: block; }
+  .admin-table tbody tr {
+    /* No explicit width: with box-sizing:border-box + margin, a `width:100%`
+       here would overflow the card past its container by the margin amount
+       (clipped by .admin-table-wrap's overflow:hidden, so it silently ate the
+       right-side margin and content sat flush against the border). Block boxes
+       size to fill their container minus margins by default, so just omit it. */
+    border: 1px solid var(--a-border);
+    border-radius: var(--a-radius-sm);
+    margin: 12px;
+    padding: 12px 14px;
+  }
+  .admin-table td {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 8px 2px;
+    border: none;
+    text-align: right;
+  }
+  .admin-table td[data-label]:not([data-label=""])::before {
+    content: attr(data-label);
+    flex-shrink: 0;
+    font-size: var(--a-fs-xs);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--a-muted);
+    text-align: left;
+  }
+  .admin-table td.admin-td-image {
+    justify-content: center;
+    padding-bottom: 12px;
+    margin-bottom: 4px;
+    border-bottom: 1px solid var(--a-border);
+  }
+  .admin-table td.admin-td-name {
+    align-items: flex-start;
+    justify-content: flex-start;
+    text-align: left;
+  }
+  .admin-table td.admin-td-name::before {
+    padding-top: 2px;
+  }
+  .admin-table td.admin-reorder {
+    justify-content: flex-start;
+    padding-bottom: 8px;
+  }
+  .admin-table td.admin-row-actions {
+    justify-content: flex-end;
+    padding-top: 12px;
+    margin-top: 4px;
+    border-top: 1px solid var(--a-border);
+  }
+
+  /* "product" card variant — used by food-item lists (Salads/Lunch/Wraps) whose
+     columns are always image, name, price, rating, categories, isAvailable.
+     Laid out as a real product card (photo beside title/price/rating) instead
+     of the generic stacked label/value rows every other list falls back to. */
+  .admin-table--product tbody tr {
+    display: grid;
+    grid-template-columns: 68px minmax(0, 1fr);
+    grid-template-areas:
+      "image name"
+      "image price"
+      "image rating"
+      "cat cat"
+      "avail avail"
+      "reorder actions";
+    align-items: start;
+    gap: 8px 14px;
+  }
+
+  .admin-table--product tbody td {
+    padding: 0;
+    min-width: 0;
+  }
+
+  .admin-table--product tbody td.admin-td-image {
+    grid-area: image;
+    justify-content: flex-start;
+    align-items: flex-start;
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+  }
+
+  .admin-table--product tbody td.admin-td-name {
+    grid-area: name;
+  }
+
+  .admin-table--product tbody td.admin-td-name::before {
+    display: none;
+  }
+
+  .admin-table--product tbody td.admin-td-price {
+    grid-area: price;
+  }
+
+  .admin-table--product tbody td.admin-td-rating {
+    grid-area: rating;
+  }
+
+  .admin-table--product tbody td.admin-td-categories {
+    grid-area: cat;
+  }
+
+  .admin-table--product tbody td.admin-td-isAvailable {
+    grid-area: avail;
+  }
+
+  .admin-table--product tbody td.admin-reorder {
+    grid-area: reorder;
+    justify-content: flex-start;
+    padding-top: 10px;
+    margin-top: 2px;
+    border-top: 1px solid var(--a-border);
+  }
+
+  .admin-table--product tbody td.admin-row-actions {
+    grid-area: actions;
+    justify-content: flex-end;
+    padding-top: 10px;
+    margin-top: 2px;
+    border-top: 1px solid var(--a-border);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .admin-shell *,
   .admin-login *,

@@ -15,7 +15,9 @@ import { PagesPage } from './pages/PagesPage';
 import PageEdit from './pages/PageEdit';
 import { SectionsPage, SectionEdit } from './pages/SectionsPage';
 import { MenusPage, MenuManager } from './pages/MenusPage';
-import { DishesPage, DishEdit } from './pages/DishesPage';
+import { SaladsPage, SaladEdit } from './pages/DishesPage';
+import { LunchPage, LunchEdit } from './pages/LunchPage';
+import { WrapsPage, WrapEdit } from './pages/WrapsPage';
 import { TestimonialsPage, TestimonialEdit } from './pages/TestimonialsPage';
 import { FaqsPage, FaqEdit } from './pages/FaqsPage';
 import { SocialPage, SocialEdit } from './pages/SocialPage';
@@ -57,9 +59,17 @@ export default function AdminApp() {
               <Route path="menus" element={<MenusPage />} />
               <Route path="menus/:id" element={<MenuManager />} />
 
-              <Route path="dishes" element={<DishesPage />} />
-              <Route path="dishes/new" element={<DishEdit />} />
-              <Route path="dishes/:id" element={<DishEdit />} />
+              <Route path="salads" element={<SaladsPage />} />
+              <Route path="salads/new" element={<SaladEdit />} />
+              <Route path="salads/:id" element={<SaladEdit />} />
+
+              <Route path="lunch" element={<LunchPage />} />
+              <Route path="lunch/new" element={<LunchEdit />} />
+              <Route path="lunch/:id" element={<LunchEdit />} />
+
+              <Route path="wraps" element={<WrapsPage />} />
+              <Route path="wraps/new" element={<WrapEdit />} />
+              <Route path="wraps/:id" element={<WrapEdit />} />
 
               <Route path="testimonials" element={<TestimonialsPage />} />
               <Route path="testimonials/new" element={<TestimonialEdit />} />

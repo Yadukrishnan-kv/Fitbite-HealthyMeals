@@ -3,6 +3,7 @@ import { NavLink, Outlet, useNavigate, useLocation, Link } from 'react-router-do
 import { AnimatePresence, motion } from 'framer-motion';
 import {
   LuLayoutDashboard, LuFileText, LuLayoutPanelTop, LuListTree, LuUtensilsCrossed,
+  LuSoup, LuSandwich,
   LuMessageSquareQuote, LuCircleHelp, LuImages, LuSettings, LuShare2, LuInbox,
   LuUser, LuLogOut, LuChevronsLeft, LuSearch, LuSun, LuMoon, LuExternalLink,
   LuChevronRight,
@@ -28,7 +29,9 @@ const NAV_GROUPS = [
   {
     title: 'Catalog',
     items: [
-      { to: '/admin/dishes', label: 'Dishes', icon: LuUtensilsCrossed },
+      { to: '/admin/salads', label: 'Salads', icon: LuUtensilsCrossed },
+      { to: '/admin/lunch', label: 'Lunch', icon: LuSoup },
+      { to: '/admin/wraps', label: 'Wraps', icon: LuSandwich },
       { to: '/admin/testimonials', label: 'Testimonials', icon: LuMessageSquareQuote },
       { to: '/admin/faqs', label: 'FAQs', icon: LuCircleHelp },
       { to: '/admin/media', label: 'Media Library', icon: LuImages },
@@ -50,7 +53,8 @@ const NAV_GROUPS = [
 
 /** Friendly title for the current route, used in breadcrumbs. */
 const CRUMB_LABELS = {
-  pages: 'Pages', sections: 'Homepage Sections', menus: 'Menus', dishes: 'Dishes',
+  pages: 'Pages', sections: 'Homepage Sections', menus: 'Menus', salads: 'Salads',
+  lunch: 'Lunch', wraps: 'Wraps',
   testimonials: 'Testimonials', faqs: 'FAQs', media: 'Media Library',
   submissions: 'Submissions', settings: 'Site Settings', social: 'Social Links',
   profile: 'My Profile', new: 'New',

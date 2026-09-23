@@ -63,7 +63,7 @@ export default function DashboardPage() {
       value: counts.pages.total, sub: `${counts.pages.published} published`,
       chip: `${publishedPct}% live`,
     },
-    { key: 'dishes', label: 'Dishes', to: '/admin/dishes', icon: LuUtensilsCrossed, tone: 'success', value: counts.dishes, sub: 'on the menu' },
+    { key: 'salads', label: 'Salads', to: '/admin/salads', icon: LuUtensilsCrossed, tone: 'success', value: counts.salads, sub: 'on the menu' },
     { key: 'testimonials', label: 'Testimonials', to: '/admin/testimonials', icon: LuMessageSquareQuote, tone: 'info', value: counts.testimonials, sub: 'customer reviews' },
     { key: 'faqs', label: 'FAQs', to: '/admin/faqs', icon: LuCircleHelp, tone: 'warning', value: counts.faqs, sub: 'answers published' },
     { key: 'media', label: 'Media Files', to: '/admin/media', icon: LuImages, tone: 'primary', value: counts.media, sub: 'in the library' },
@@ -75,7 +75,7 @@ export default function DashboardPage() {
   ];
 
   const distribution = [
-    { label: 'Dishes', value: counts.dishes },
+    { label: 'Salads', value: counts.salads },
     { label: 'Testimonials', value: counts.testimonials },
     { label: 'FAQs', value: counts.faqs },
     { label: 'Media', value: counts.media },
@@ -86,7 +86,7 @@ export default function DashboardPage() {
 
   const quickActions = [
     { to: '/admin/pages/new', label: 'New Page', icon: LuFileText },
-    { to: '/admin/dishes/new', label: 'New Dish', icon: LuUtensilsCrossed },
+    { to: '/admin/salads/new', label: 'New Salad', icon: LuUtensilsCrossed },
     { to: '/admin/testimonials/new', label: 'Testimonial', icon: LuMessageSquareQuote },
     { to: '/admin/media', label: 'Upload Media', icon: LuUpload },
     { to: '/admin/faqs/new', label: 'New FAQ', icon: LuCircleHelp },
