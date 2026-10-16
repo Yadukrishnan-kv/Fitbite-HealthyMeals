@@ -1,7 +1,7 @@
 {
   "rewrites": [
-    { "source": "/api/:path*", "destination": "https://YOUR-RENDER-SERVICE.onrender.com/api/:path*" },
-    { "source": "/uploads/:path*", "destination": "https://YOUR-RENDER-SERVICE.onrender.com/uploads/:path*" },
+    { "source": "/api/:path*", "destination": "https://fitbite-server.onrender.com/api/:path*" },
+    { "source": "/uploads/:path*", "destination": "https://fitbite-server.onrender.com/uploads/:path*" },
     { "source": "/(.*)", "destination": "/index.html" }
   ]
 }
