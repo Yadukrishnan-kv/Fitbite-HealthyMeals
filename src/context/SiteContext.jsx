@@ -1,4 +1,5 @@
-import { createContext, useContext, useEffect, useMemo, useState } from 'react';
+import { createContext, useContext, useEffect, useMemo, useRef, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import { publicApi } from '../api/publicClient';
 
 /**
@@ -18,6 +19,7 @@ const EMPTY = {
   settings: {},
   socialLinks: [],
   menus: { header: [], footer: [] },
+  sections: [],
   sectionsByKey: {},
 };
 
@@ -25,6 +27,9 @@ export function SiteProvider({ children }) {
   const [data, setData] = useState(EMPTY);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [refetchKey, setRefetchKey] = useState(0);
+  const { pathname } = useLocation();
+  const prevPathRef = useRef(pathname);
 
   useEffect(() => {
     let alive = true;
@@ -45,6 +50,9 @@ export function SiteProvider({ children }) {
             header: boot?.menus?.header ?? [],
             footer: boot?.menus?.footer ?? [],
           },
+          // `sections` is already sorted by sortOrder and filtered to isVisible
+          // by the API — it is the source of truth for homepage layout order.
+          sections: sec?.sections ?? [],
           sectionsByKey: sec?.byKey ?? {},
         });
       } catch (err) {
@@ -60,6 +68,22 @@ export function SiteProvider({ children }) {
     return () => {
       alive = false;
     };
+  }, [refetchKey]);
+
+  // Content is fetched once on mount, so a tab that's been sitting on the
+  // public site (or came back from /admin via client-side nav) would keep
+  // showing stale data after an admin edit. Refetch on both triggers.
+  useEffect(() => {
+    const wasAdmin = prevPathRef.current.startsWith('/admin');
+    const isAdmin = pathname.startsWith('/admin');
+    if (wasAdmin && !isAdmin) setRefetchKey((k) => k + 1);
+    prevPathRef.current = pathname;
+  }, [pathname]);
+
+  useEffect(() => {
+    const onFocus = () => setRefetchKey((k) => k + 1);
+    window.addEventListener('focus', onFocus);
+    return () => window.removeEventListener('focus', onFocus);
   }, []);
 
   const value = useMemo(() => ({ ...data, loading, error }), [data, loading, error]);

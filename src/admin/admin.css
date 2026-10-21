@@ -594,8 +594,13 @@
 .admin-count { color: var(--a-muted); font-size: var(--a-fs-sm); font-weight: 550; }
 
 .admin-input-icon { position: relative; display: inline-flex; align-items: center; max-width: 340px; flex: 1; }
-.admin-input-icon svg { position: absolute; left: 13px; color: var(--a-muted); font-size: 16px; pointer-events: none; }
+.admin-input-icon > svg:first-child { position: absolute; left: 13px; top: 50%; transform: translateY(-50%); color: var(--a-muted); font-size: 16px; pointer-events: none; }
 .admin-input-icon .admin-input { padding-left: 38px; }
+.admin-input-icon .admin-input-toggle {
+  position: absolute; right: 10px; top: 50%; transform: translateY(-50%);
+  background: none; border: none; cursor: pointer; color: var(--a-muted);
+  display: grid; place-items: center; font-size: 17px; padding: 4px;
+}
 
 .admin-table-wrap {
   background: var(--a-surface);

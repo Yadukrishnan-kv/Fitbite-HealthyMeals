@@ -62,9 +62,10 @@ export default function DishesPage() {
   }, [activeType, dishes]);
 
   useDocumentMeta({
-    title: useSetting("siteTitle", "Our Menu — Fitbite"),
-    description: useSetting("metaDescription", ""),
-    keywords: useSetting("metaKeywords", ""),
+    title: "Our Menu — Fitbite Power Bowls & Salads",
+    description:
+      "Explore Fitbite's full menu of chef-crafted power bowls and salads. High-protein, veg, and weight-loss options delivered fresh daily.",
+    keywords: "fitbite menu, power bowls, salads, high protein meals",
   });
 
   const handleTypeChange = (type) => {

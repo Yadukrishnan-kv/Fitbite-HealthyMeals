@@ -14,7 +14,6 @@ export default function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPw, setShowPw] = useState(false);
-  const [remember, setRemember] = useState(true);
   const [error, setError] = useState('');
   const [submitting, setSubmitting] = useState(false);
 
@@ -108,12 +107,9 @@ export default function LoginPage() {
               />
               <button
                 type="button"
+                className="admin-input-toggle"
                 onClick={() => setShowPw((s) => !s)}
                 aria-label={showPw ? 'Hide password' : 'Show password'}
-                style={{
-                  position: 'absolute', right: 10, background: 'none', border: 'none',
-                  cursor: 'pointer', color: 'var(--a-muted)', display: 'grid', placeItems: 'center', fontSize: 17,
-                }}
               >
                 {showPw ? <LuEyeOff /> : <LuEye />}
               </button>
@@ -121,14 +117,7 @@ export default function LoginPage() {
           </Field>
         </motion.div>
 
-        <motion.div className="admin-login-row" variants={item}>
-          <label className="admin-toggle" style={{ gap: 8 }}>
-            <input type="checkbox" checked={remember} onChange={(e) => setRemember(e.target.checked)} />
-            <span className="admin-toggle-track" style={{ width: 38, height: 22 }}>
-              <span className="admin-toggle-thumb" style={{ width: 16, height: 16 }} />
-            </span>
-            <span className="admin-toggle-label" style={{ fontSize: 13 }}>Remember me</span>
-          </label>
+        <motion.div className="admin-login-row" style={{ justifyContent: 'flex-end' }} variants={item}>
           <button
             type="button"
             className="admin-link"

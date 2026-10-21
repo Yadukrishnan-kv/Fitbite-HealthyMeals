@@ -5,6 +5,7 @@ import { api } from '../api/client';
 import { useToast } from '../context/ToastContext';
 import { Field, Input, Textarea, Button, Spinner, PageHeader, Badge, SkeletonTable } from '../components/ui';
 import InlineToggle from '../components/InlineToggle';
+import ImagePicker from '../components/ImagePicker';
 
 const ENDPOINT = '/admin/sections';
 
@@ -84,6 +85,10 @@ export function SectionEdit() {
   const toast = useToast();
   const [item, setItem] = useState(null);
   const [contentText, setContentText] = useState('{}');
+  // Sections whose content has an `image` key (hero, about, behind) get a
+  // proper upload field instead of making the admin paste a URL into the JSON
+  // blob. `undefined` means this section has no top-level image to manage.
+  const [imageUrl, setImageUrl] = useState(undefined);
   const [jsonError, setJsonError] = useState('');
   const [saving, setSaving] = useState(false);
 
@@ -92,7 +97,15 @@ export function SectionEdit() {
       .get(`${ENDPOINT}/${id}`)
       .then((data) => {
         setItem(data.item);
-        setContentText(JSON.stringify(data.item.content || {}, null, 2));
+        const content = data.item.content || {};
+        if (Object.prototype.hasOwnProperty.call(content, 'image')) {
+          const { image, ...rest } = content;
+          setImageUrl(image || '');
+          setContentText(JSON.stringify(rest, null, 2));
+        } else {
+          setImageUrl(undefined);
+          setContentText(JSON.stringify(content, null, 2));
+        }
       })
       .catch((e) => toast.error(e.message));
   }, [id, toast]);
@@ -109,6 +122,7 @@ export function SectionEdit() {
       setJsonError('Content is not valid JSON');
       return;
     }
+    if (imageUrl !== undefined) content = { image: imageUrl, ...content };
     setSaving(true);
     try {
       await api.patch(`${ENDPOINT}/${id}`, {
@@ -139,10 +153,17 @@ export function SectionEdit() {
           <div className="admin-form-full">
             <Field label="Subtitle"><Textarea rows={2} value={item.subtitle || ''} onChange={(e) => set('subtitle', e.target.value)} /></Field>
           </div>
+          {imageUrl !== undefined && (
+            <div className="admin-form-full">
+              <Field label="Image">
+                <ImagePicker value={imageUrl} onChange={setImageUrl} />
+              </Field>
+            </div>
+          )}
           <div className="admin-form-full">
             <Field
               label="Structured Content (JSON)"
-              hint="Advanced: stats, cards, steps, images for this section. Keep the keys intact."
+              hint="Advanced: stats, cards, steps for this section. Keep the keys intact."
               error={jsonError}
             >
               <Textarea

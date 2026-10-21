@@ -1,4 +1,4 @@
-import { useRef, useState, useEffect } from "react";
+import { useRef } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { HiArrowRight } from "react-icons/hi";
 import { useSection } from "../context/SiteContext";
@@ -35,7 +35,6 @@ const FALLBACK = {
 
 export default function Hero() {
   const ref = useRef(null);
-  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
 
   const h = useSection("hero", FALLBACK);
   const stats = h.stats?.length ? h.stats : FALLBACK.stats;
@@ -51,20 +50,6 @@ export default function Hero() {
   const imgY = useTransform(scrollYProgress, [0, 1], [0, 80]);
   const contentY = useTransform(scrollYProgress, [0, 1], [0, -40]);
   const opacity = useTransform(scrollYProgress, [0, 0.6], [1, 0]);
-
-  useEffect(() => {
-    const handleMouse = (e) => {
-      const rect = ref.current?.getBoundingClientRect();
-      if (rect) {
-        setMousePos({
-          x: ((e.clientX - rect.left) / rect.width - 0.5) * 2,
-          y: ((e.clientY - rect.top) / rect.height - 0.5) * 2,
-        });
-      }
-    };
-    window.addEventListener("mousemove", handleMouse);
-    return () => window.removeEventListener("mousemove", handleMouse);
-  }, []);
 
   return (
     <section className="hero" id="home" ref={ref}>
@@ -169,35 +154,20 @@ export default function Hero() {
                 transition={{ duration: 40, repeat: Infinity, ease: "linear" }}
               />
 
-              <motion.div
-                style={{
-                  transformStyle: "preserve-3d",
-                  perspective: 1200,
-                }}
-                animate={{
-                  rotateY: mousePos.x * 6,
-                  rotateX: -mousePos.y * 6,
-                }}
-                transition={{ type: "spring", stiffness: 100, damping: 30 }}
-              >
-                <motion.img
-                  src={h.image}
-                  alt="Healthy meal bowl"
-                  className="hero-main-img"
-                  initial={{ opacity: 0, scale: 0.8, y: 40 }}
-                  animate={{ opacity: 1, scale: 1, y: 0 }}
-                  transition={{ duration: 0.8, delay: 0.3 }}
-                />
-              </motion.div>
+              <motion.img
+                src={h.image}
+                alt="Healthy meal bowl"
+                className="hero-main-img"
+                initial={{ opacity: 0, scale: 0.8, y: 40 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                transition={{ duration: 0.8, delay: 0.3 }}
+              />
 
               <motion.div
                 className="hero-float-card card1"
                 initial={{ opacity: 0, x: 40 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.6, delay: 0.7 }}
-                style={{
-                  transform: `translate(${mousePos.x * 8}px, ${mousePos.y * 8}px)`,
-                }}
               >
                 <div className="fc-label">{floatCards[0]?.label}</div>
                 <div className="fc-val">{floatCards[0]?.val}</div>
@@ -209,9 +179,6 @@ export default function Hero() {
                 initial={{ opacity: 0, x: -40 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.6, delay: 0.9 }}
-                style={{
-                  transform: `translate(${mousePos.x * -6}px, ${mousePos.y * -6}px)`,
-                }}
               >
                 <div className="fc-label">{floatCards[1]?.label}</div>
                 <div className="fc-val">{floatCards[1]?.val}</div>
