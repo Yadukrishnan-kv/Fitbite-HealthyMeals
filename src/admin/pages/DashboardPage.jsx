@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import {
-  LuFileText, LuUtensilsCrossed, LuMessageSquareQuote, LuCircleHelp, LuImages,
+  LuUtensilsCrossed, LuMessageSquareQuote, LuCircleHelp, LuImages,
   LuListTree, LuInbox, LuPlus, LuUpload, LuSettings, LuArrowRight,
   LuActivity, LuServer, LuDatabase, LuShieldCheck, LuHardDrive, LuSparkles,
   LuSoup, LuSandwich,
@@ -56,14 +56,7 @@ export default function DashboardPage() {
 
   const { counts, recentSubmissions } = data;
 
-  const publishedPct = counts.pages.total ? Math.round((counts.pages.published / counts.pages.total) * 100) : 0;
-
   const kpis = [
-    {
-      key: 'pages', label: 'Total Pages', to: '/admin/pages', icon: LuFileText, tone: 'primary',
-      value: counts.pages.total, sub: `${counts.pages.published} published`,
-      chip: `${publishedPct}% live`,
-    },
     { key: 'salads', label: 'Salads', to: '/admin/salads', icon: LuUtensilsCrossed, tone: 'success', value: counts.salads, sub: 'on the menu' },
     { key: 'lunch', label: 'Lunch', to: '/admin/lunch', icon: LuSoup, tone: 'warning', value: counts.lunch, sub: 'on the menu' },
     { key: 'wraps', label: 'Wraps', to: '/admin/wraps', icon: LuSandwich, tone: 'success', value: counts.wraps, sub: 'on the menu' },
@@ -85,12 +78,10 @@ export default function DashboardPage() {
     { label: 'FAQs', value: counts.faqs },
     { label: 'Media', value: counts.media },
     { label: 'Menu Items', value: counts.menuItems },
-    { label: 'Pages', value: counts.pages.total },
   ];
   const distTotal = distribution.reduce((s, d) => s + d.value, 0);
 
   const quickActions = [
-    { to: '/admin/pages/new', label: 'New Page', icon: LuFileText },
     { to: '/admin/salads/new', label: 'New Salad', icon: LuUtensilsCrossed },
     { to: '/admin/lunch/new', label: 'New Lunch Item', icon: LuSoup },
     { to: '/admin/wraps/new', label: 'New Wrap', icon: LuSandwich },
@@ -113,7 +104,7 @@ export default function DashboardPage() {
         <h1>{user?.name ? user.name.split(' ')[0] : 'Welcome'} 👋</h1>
         <p>Here's what's happening across your Fitbite website today. Manage content, review enquiries, and keep everything fresh.</p>
         <div className="admin-welcome-actions">
-          <Link to="/admin/pages/new" className="admin-btn admin-btn--light"><LuPlus /> Create Page</Link>
+          <Link to="/admin/salads/new" className="admin-btn admin-btn--light"><LuPlus /> New Salad</Link>
           <Link to="/admin/submissions" className="admin-btn admin-btn--ghost"><LuInbox /> View Submissions</Link>
         </div>
       </motion.div>
@@ -344,7 +335,7 @@ function DashboardSkeleton() {
     <div>
       <Skeleton h={128} radius={18} style={{ marginBottom: 22 }} />
       <div className="admin-stat-grid">
-        {Array.from({ length: 7 }).map((_, i) => (
+        {Array.from({ length: 6 }).map((_, i) => (
           <Skeleton key={i} className="admin-skeleton--kpi" h={128} radius={18} />
         ))}
       </div>

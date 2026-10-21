@@ -14,7 +14,6 @@ import CTA from "./components/CTA";
 import Contact from "./components/Contact";
 import Footer from "./components/Footer";
 import DishesPage from "./pages/DishesPage";
-import CmsPage from "./pages/CmsPage";
 import { useDocumentMeta, useSite } from "./context/SiteContext";
 import AdminApp from "./admin/AdminApp";
 
@@ -110,7 +109,6 @@ function App() {
       <Route element={<PublicLayout />}>
         <Route path="/" element={<HomePage />} />
         <Route path="/dishes" element={<DishesPage />} />
-        <Route path="/:slug" element={<CmsPage />} />
       </Route>
     </Routes>
   );

@@ -11,8 +11,6 @@ import AdminLayout from './components/AdminLayout';
 
 import LoginPage from './pages/LoginPage';
 import DashboardPage from './pages/DashboardPage';
-import { PagesPage } from './pages/PagesPage';
-import PageEdit from './pages/PageEdit';
 import { SectionsPage, SectionEdit } from './pages/SectionsPage';
 import { MenusPage, MenuManager } from './pages/MenusPage';
 import { SaladsPage, SaladEdit } from './pages/DishesPage';
@@ -48,10 +46,6 @@ export default function AdminApp() {
               }
             >
               <Route index element={<DashboardPage />} />
-
-              <Route path="pages" element={<PagesPage />} />
-              <Route path="pages/new" element={<PageEdit />} />
-              <Route path="pages/:id" element={<PageEdit />} />
 
               <Route path="sections" element={<SectionsPage />} />
               <Route path="sections/:id" element={<SectionEdit />} />

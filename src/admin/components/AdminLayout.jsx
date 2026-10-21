@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { NavLink, Outlet, useNavigate, useLocation, Link } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
 import {
-  LuLayoutDashboard, LuFileText, LuLayoutPanelTop, LuListTree, LuUtensilsCrossed,
+  LuLayoutDashboard, LuLayoutPanelTop, LuListTree, LuUtensilsCrossed,
   LuSoup, LuSandwich,
   LuMessageSquareQuote, LuCircleHelp, LuImages, LuSettings, LuShare2, LuInbox,
   LuUser, LuLogOut, LuChevronsLeft, LuSearch, LuSun, LuMoon, LuExternalLink,
@@ -21,7 +21,6 @@ const NAV_GROUPS = [
   {
     title: 'Content',
     items: [
-      { to: '/admin/pages', label: 'Pages', icon: LuFileText },
       { to: '/admin/sections', label: 'Homepage Sections', icon: LuLayoutPanelTop },
       { to: '/admin/menus', label: 'Menus', icon: LuListTree },
     ],
@@ -53,7 +52,7 @@ const NAV_GROUPS = [
 
 /** Friendly title for the current route, used in breadcrumbs. */
 const CRUMB_LABELS = {
-  pages: 'Pages', sections: 'Homepage Sections', menus: 'Menus', salads: 'Salads',
+  sections: 'Homepage Sections', menus: 'Menus', salads: 'Salads',
   lunch: 'Lunch', wraps: 'Wraps',
   testimonials: 'Testimonials', faqs: 'FAQs', media: 'Media Library',
   submissions: 'Submissions', settings: 'Site Settings', social: 'Social Links',
