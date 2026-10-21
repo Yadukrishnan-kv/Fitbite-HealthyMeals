@@ -5,6 +5,7 @@ import {
   LuFileText, LuUtensilsCrossed, LuMessageSquareQuote, LuCircleHelp, LuImages,
   LuListTree, LuInbox, LuPlus, LuUpload, LuSettings, LuArrowRight,
   LuActivity, LuServer, LuDatabase, LuShieldCheck, LuHardDrive, LuSparkles,
+  LuSoup, LuSandwich,
 } from 'react-icons/lu';
 import { api } from '../api/client';
 import { useAuth } from '../context/AuthContext';
@@ -64,6 +65,8 @@ export default function DashboardPage() {
       chip: `${publishedPct}% live`,
     },
     { key: 'salads', label: 'Salads', to: '/admin/salads', icon: LuUtensilsCrossed, tone: 'success', value: counts.salads, sub: 'on the menu' },
+    { key: 'lunch', label: 'Lunch', to: '/admin/lunch', icon: LuSoup, tone: 'warning', value: counts.lunch, sub: 'on the menu' },
+    { key: 'wraps', label: 'Wraps', to: '/admin/wraps', icon: LuSandwich, tone: 'success', value: counts.wraps, sub: 'on the menu' },
     { key: 'testimonials', label: 'Testimonials', to: '/admin/testimonials', icon: LuMessageSquareQuote, tone: 'info', value: counts.testimonials, sub: 'customer reviews' },
     { key: 'faqs', label: 'FAQs', to: '/admin/faqs', icon: LuCircleHelp, tone: 'warning', value: counts.faqs, sub: 'answers published' },
     { key: 'media', label: 'Media Files', to: '/admin/media', icon: LuImages, tone: 'primary', value: counts.media, sub: 'in the library' },
@@ -76,6 +79,8 @@ export default function DashboardPage() {
 
   const distribution = [
     { label: 'Salads', value: counts.salads },
+    { label: 'Lunch', value: counts.lunch },
+    { label: 'Wraps', value: counts.wraps },
     { label: 'Testimonials', value: counts.testimonials },
     { label: 'FAQs', value: counts.faqs },
     { label: 'Media', value: counts.media },
@@ -87,6 +92,8 @@ export default function DashboardPage() {
   const quickActions = [
     { to: '/admin/pages/new', label: 'New Page', icon: LuFileText },
     { to: '/admin/salads/new', label: 'New Salad', icon: LuUtensilsCrossed },
+    { to: '/admin/lunch/new', label: 'New Lunch Item', icon: LuSoup },
+    { to: '/admin/wraps/new', label: 'New Wrap', icon: LuSandwich },
     { to: '/admin/testimonials/new', label: 'Testimonial', icon: LuMessageSquareQuote },
     { to: '/admin/media', label: 'Upload Media', icon: LuUpload },
     { to: '/admin/faqs/new', label: 'New FAQ', icon: LuCircleHelp },
